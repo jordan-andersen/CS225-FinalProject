@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,8 @@ public class QueryManager {
     }
 
     private List<Map<String, Object>> runQuery(String tableName, QuerySpecification querySpecification) {
+        List<Map<String, Object>> results = new ArrayList<>();
+        //TEST
         /*
          - results ← empty list
          - if querySpecification is null
@@ -52,7 +55,7 @@ public class QueryManager {
             - add rowMap to results
          - return results
          */
-        return List.of();
+        return results;
     }
 
 
