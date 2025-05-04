@@ -7,7 +7,7 @@ package model;
  *
  * @author -- Brad Jn-Baptiste
  */
-public class ColumnData(
+public class ColumnData{
         /// The name of the column.
         String name;
 
@@ -46,3 +46,5 @@ public void setPrimaryKey(boolean isPrimaryKey){
 @Override
 public String toString(){
         return name + " (" + type + ") " + (isPrimaryKey ? " Primary Key: " : "");
+        }
+}
