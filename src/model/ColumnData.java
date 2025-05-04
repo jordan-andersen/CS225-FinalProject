@@ -26,20 +26,23 @@ public ColumnData(String name, String type, boolean isPrimaryKey){
 public String getName(){
         return name;
 }
-public String getType(){
-        return type;
-}
-public boolean isPrimaryKey(){
-        return isPrimaryKey;
-}
-
 public void setName(String name){
         this.name = name;
 }
+public String getType(){
+        return type;
+}
 public void setType(){
         this.type = type;
+}
+public boolean isPrimaryKey(){
+        return isPrimaryKey;
 }
 public void setPrimaryKey(boolean isPrimaryKey){
         isPrimaryKey = primaryKey;
 }
 
+// the isPrimaryKey ? is if-else statement
+@Override
+public String toString(){
+        return name + " (" + type + ") " + (isPrimaryKey ? " Primary Key: " : "");
