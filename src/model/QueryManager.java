@@ -1,9 +1,13 @@
 package model;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Service for executing common SQL queries against the database.
@@ -33,8 +37,41 @@ public class QueryManager {
     }
 
     private List<Map<String, Object>> runQuery(String tableName, QuerySpecification querySpecification) {
-        List<Map<String, Object>> results = new ArrayList<>();
-        //TEST
+        //THE COMMENTS AFTER VARIABLE NAMES IS THEIR EQUIVALENT IN THE PSEUDO CODE. (i.e. where = wherePart).
+
+        List<Map<String, Object>> results = new ArrayList<>(); //results
+        String where; //wherePart
+        String statementString; //sql
+
+        if (querySpecification == null) {
+            where = "";
+        }
+        else {
+            where = "WHERE" + querySpecification.clause;
+        }
+        statementString = "SELECT * FROM " + formatString(tableName) + where;
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(statementString)) {
+            if (querySpecification != null) {
+                for (int i = 0; i < querySpecification.copies; i++) {
+                    preparedStatement.setString(i, querySpecification.param);
+                }
+            }
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+               List<ColumnData> columns = metadata.getColumns(tableName);
+               while (resultSet.next()) {
+                   HashMap rowMap = new HashMap<String, Object>();
+                   for (ColumnData column : columns) {
+                       rowMap.put(column.name(), resultSet.getString(column.name()));
+                   }
+                   results.add(rowMap);
+               }
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         /*
          - results ← empty list
          - if querySpecification is null
@@ -43,7 +80,7 @@ public class QueryManager {
             - wherePart ← " WHERE " + querySpecification.clause
          - sql ← "SELECT * FROM " + formatString(tableName) + wherePart
          - stmt ← prepareStatement(sql)
-         - if querySpecification not null
+         - if querySpecification not nullS
             - for i from 1 to querySpecification.copies
               - stmt.setString(i, querySpecification.param)
          - rs ← stmt.executeQuery()
