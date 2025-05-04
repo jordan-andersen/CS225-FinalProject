@@ -37,18 +37,17 @@ public class QueryManager {
     }
 
     private List<Map<String, Object>> runQuery(String tableName, QuerySpecification querySpecification) {
-        //THE COMMENTS AFTER VARIABLE NAMES IS THEIR EQUIVALENT IN THE PSEUDO CODE. (i.e. where = wherePart).
 
-        List<Map<String, Object>> results = new ArrayList<>(); //results
-        String where; //wherePart
-        String statementString; //sql
+        List<Map<String, Object>> results = new ArrayList<>();
+        String where;
+        String statementString;
 
         if (querySpecification == null) {
             where = "";
-        }
-        else {
+        } else {
             where = "WHERE" + querySpecification.clause;
         }
+
         statementString = "SELECT * FROM " + formatString(tableName) + where;
 
         try(PreparedStatement preparedStatement = connection.prepareStatement(statementString)) {
@@ -60,38 +59,17 @@ public class QueryManager {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                List<ColumnData> columns = metadata.getColumns(tableName);
                while (resultSet.next()) {
-                   HashMap rowMap = new HashMap<String, Object>();
+                   Map<String, Object> rowMap = new HashMap<>();
                    for (ColumnData column : columns) {
-                       rowMap.put(column.name(), resultSet.getString(column.name()));
+                       rowMap.put(column.getName(), resultSet.getString(column.getName()));
                    }
                    results.add(rowMap);
                }
             }
         }
         catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-        /*
-         - results ← empty list
-         - if querySpecification is null
-            - wherePart ← ""
-         - else
-            - wherePart ← " WHERE " + querySpecification.clause
-         - sql ← "SELECT * FROM " + formatString(tableName) + wherePart
-         - stmt ← prepareStatement(sql)
-         - if querySpecification not nullS
-            - for i from 1 to querySpecification.copies
-              - stmt.setString(i, querySpecification.param)
-         - rs ← stmt.executeQuery()
-         - columns ← metadata.getColumns(tableName)
-         - while rs.hasNext()
-            - rowMap ← empty map
-            - for each column in columns
-              - rowMap.put(column.name(), rs.getObject(column.name()))
-            - add rowMap to results
-         - return results
-         */
         return results;
     }
 

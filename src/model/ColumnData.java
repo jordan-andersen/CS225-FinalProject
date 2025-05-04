@@ -39,10 +39,9 @@ public boolean isPrimaryKey(){
         return isPrimaryKey;
 }
 public void setPrimaryKey(boolean isPrimaryKey){
-        isPrimaryKey = primaryKey;
+        isPrimaryKey = isPrimaryKey;
 }
 
-// the isPrimaryKey ? is if-else statement
 @Override
 public String toString(){
         return name + " (" + type + ") " + (isPrimaryKey ? " Primary Key: " : "");
