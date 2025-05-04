@@ -1,7 +1,17 @@
 package model;
 
+//import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
+//import javax.management.RuntimeErrorException;
+
+import org.mindrot.jbcrypt.BCrypt;
+
+//import com.healthmarketscience.jackcess.RuntimeIOException;
+
+// created by Valerie Holland
 /**
  * Manages user accounts and authentication in the database.
  * On class load, ensures the Users table exists and a default admin account is created.
@@ -75,8 +85,41 @@ public class UserManager {
          - else
             - return null
          */
+        String statement = "SELECT password_hash, role FROM Users WHERE username=?";
+        try(PreparedStatement ps = connection.prepareStatement(statement)) {
+        ps.setString(1, username);
+        try(ResultSet rs = ps.executeQuery()){
+            if(rs.next()){
+                String hashed = rs.getString("password_hash");
+                String role = rs.getString("role");
+
+                if(BCrypt.checkpw(password,hashed)){
+                    return new User(username,role);
+                }
+            }
+        }
+        } catch (SQLException e){
+            throw new RuntimeException("Login verification failed. Try again.", e);
+
+        }
         return null;
     }
+    /**
+     * allows admin to change User role
+     * @param username
+     * @param newRole
+     */
+    public void updateUserRole(String username, String newRole) {
+        String sql = "UPDATE Users SET role=? WHERE username=?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, newRole);
+            ps.setString(2, username);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Updating user role failed", e);
+        }
+    }
+    
 
     /**
      * Creates a new user with the specified credentials and role.
@@ -84,14 +127,17 @@ public class UserManager {
      * @param username the username for the new account
      * @param password the plaintext password for the new account
      * @param role     the assigned role (e.g. "admin", "user")
+     * @throws SQLException 
      * @throws RuntimeException if a database access error occurs
      */
-    public void createUser(String username, String password, String role) {
+    public void createUser(String username, String password, String role) throws SQLException {
         /*
          - call createUser(connection, username, password, role)
          - if SQLException occurs
             - throw runtime exception
          */
+
+         createUser(connection, username, password, role);
     }
 
     /**
@@ -104,7 +150,7 @@ public class UserManager {
      * @param role       the assigned role
      * @throws SQLException if a database access error occurs
      */
-    public static void createUser(Connection connection, String username, String password, String role) {
+    public static void createUser(Connection connection, String username, String password, String role) throws SQLException {
         /*
          - prepare SQL "INSERT INTO Users(username,password_hash,role) VALUES(?,?,?)"
          - bind parameters:
@@ -115,15 +161,23 @@ public class UserManager {
          - if SQLException occurs
             - propagate exception
          */
+        String statement = "INSERT INTO Users(username, password_hash,role) VALUES (?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(statement)){
+        ps.setString(1, username);  
+        ps.setString(2, BCrypt.hashpw(password, BCrypt.gensalt()));
+        ps.setString(3, role);  
+        ps.executeUpdate();
+        }
     }
 
     /**
      * Deletes the user with the specified username.
      *
      * @param username the username of the account to remove
+     * @throws SQLException 
      * @throws RuntimeException if a database access error occurs
      */
-    public void deleteUser(String username) {
+    public void deleteUser(String username) throws SQLException {
         /*
          - prepare SQL "DELETE FROM Users WHERE username=?"
          - bind username to parameter 1
@@ -131,6 +185,68 @@ public class UserManager {
          - if SQLException occurs
             - throw runtime exception
          */
+        String statement = "DELETE FROM Users WHERE username=?";
+        try(PreparedStatement ps = connection.prepareStatement(statement)){
+            ps.setString(1,username);
+            ps.executeUpdate();
+
+        }
     }
+    /**
+     * Checks if a user with the specified username already exists.
+     * Returns true if the user exists, false otherwise.
+     * @param username
+     * @return
+     */
+    public boolean userExists(String username) {
+        String sql = "SELECT 1 FROM Users WHERE username=?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Checking user existence failed", e);
+        }
+    }
+    /**
+     * Lists all users in the database.
+     * Returns a list of User objects representing each user.
+     * @throws SQLException
+     * @throws RuntimeException if a database access error occurs
+     * @return
+     */
+    public List<User> listUsers() {
+    List<User> users = new ArrayList<>();
+    String sql = "SELECT username, role FROM Users";
+    try (Statement stmt = connection.createStatement();
+         ResultSet rs = stmt.executeQuery(sql)) {
+        while (rs.next()) {
+            users.add(new User(rs.getString("username"), rs.getString("role")));
+        }
+    } catch (SQLException e) {
+        throw new RuntimeException("Listing users failed", e);
+    }
+    return users;
+}
+    /**
+     * Changes the password for the specified user.
+    * Hashes the new password before storing it in the database.
+    * @throws SQLException
+    * @param username
+    * @param newPassword
+    */
+    public void changePassword(String username, String newPassword) {
+        String sql = "UPDATE Users SET password_hash=? WHERE username=?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, BCrypt.hashpw(newPassword, BCrypt.gensalt()));
+            ps.setString(2, username);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Password change failed", e);
+        }
+}
+
+    
 
 }
