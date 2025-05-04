@@ -9,13 +9,13 @@ package model;
  */
 public class ColumnData(
         /// The name of the column.
-        String name,
+        String name;
 
         /// The SQL type name of the column (e.g., VARCHAR, INTEGER).
-        String type,
+        String type;
 
         /// True if this column is part of the primary key; false otherwise.
-        boolean isPrimaryKey) { }
+        boolean isPrimaryKey;
 
 public ColumnData(String name, String type, boolean isPrimaryKey){
         this.name = name;
