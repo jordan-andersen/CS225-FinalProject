@@ -1,5 +1,15 @@
 package model;
 
+import javax.swing.*;
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 /**
@@ -7,7 +17,10 @@ import java.util.Optional;
  */
 public class PubChemService {
     /// Base URL for PubChem PUG REST API endpoints.
-    private static final String PUB_CHEM_URL = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/";
+    private static final String PUB_CHEM_JSON_URL = "https://pubchem.ncbi.nlm.nih.gov/rest/pug/";
+    // base URL for compound page
+    private static final String PUB_CHEM_URL = "https://pubchem.ncbi.nlm.nih.gov/compound/";
+
 
     /**
      * Finds the PubChem compound ID for the specified CAS number and opens its page in the default browser.
@@ -25,6 +38,22 @@ public class PubChemService {
          - try to open default browser at that URL
             - on exception, show dialog with error message
          */
+        Optional<String> cidOptional= resolve("compound/xref/RN", cas);
+        if (!cidOptional.isPresent()) {
+            JOptionPane.showMessageDialog(null, "No PubChem match for " + cas);
+            return;
+        }
+        String cid = cidOptional.get();
+        String url = PUB_CHEM_URL + cid;
+        try {
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().browse(new URI(url));
+            } else {
+                JOptionPane.showMessageDialog(null, "Desktop has no supported browser.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Failed to open browser: " + e.getMessage());
+        }
     }
 
     /**
@@ -55,6 +84,48 @@ public class PubChemService {
          - if any IOException occurs
             - return empty Optional
          */
+        HttpURLConnection connection = null;
+        try {
+            String encodedCAS = URLEncoder.encode(cas, StandardCharsets.UTF_8.name());
+            URL url = new URL(PUB_CHEM_JSON_URL + endpoint + "/" + encodedCAS + "/cids/JSON");
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            int code = connection.getResponseCode();
+            if (code != HttpURLConnection.HTTP_OK) {
+                return Optional.empty();
+            }
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+                StringBuilder stringBuilder = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                String json = stringBuilder.toString();
+                int cidIndex = json.indexOf("\"CID\"");
+                if (cidIndex < 0) {
+                    return Optional.empty();
+                }
+                int startIndex = json.indexOf('[', cidIndex);
+                int endIndex = json.indexOf(']', startIndex);
+                if (startIndex < 0 || endIndex < 0) {
+                    return Optional.empty();
+                }
+                String listString = json.substring(startIndex + 1, endIndex);
+                String[] cids = listString.split(",");
+                for (String cid : cids) {
+                    String value = cid.trim();
+                    if (!value.isEmpty()) {
+                        return Optional.of(value);
+                    }
+                }
+            }
+        } catch (IOException e) {
+
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
         return Optional.empty();
     }
 
