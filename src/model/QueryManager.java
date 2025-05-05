@@ -4,10 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Service for executing common SQL queries against the database.
@@ -93,6 +90,29 @@ public class QueryManager {
      * @return a list of matching rows, each as a map from column to value
      */
     public List<Map<String, Object>> search(String tableName, String queryString) {
+
+        List<ColumnData> columns = metadata.getColumns(tableName);
+        List<String> textColumns = new ArrayList<>();
+        List<Map<String, Object>> results = new ArrayList<>();
+
+        for (ColumnData column : columns) {
+            if (column.getName().equalsIgnoreCase("TEXT") ||
+                    column.getName().equalsIgnoreCase("MEMO") ||
+                    column.getName().equalsIgnoreCase("CHAR")) {
+                textColumns.add(column.getName());
+            }
+        }
+
+        if (textColumns.isEmpty()) {
+            return results;
+        }
+        String where = "";
+        for (String column : textColumns) {
+           where += formatString(column) + " LIKE ? OR ";
+        }
+        QuerySpecification spec = new QuerySpecification(where, "%" + queryString + "%", textColumns.size());
+
+        return runQuery(tableName, spec);
         /*
          - columns ← metadata.getColumns(tableName)
          - textColumns ← filter columns where type matches CHAR or TEXT or MEMO
@@ -102,7 +122,7 @@ public class QueryManager {
          - spec ← new QuerySpecification(whereClause, "%" + queryString + "%", textColumns.size())
          - return runQuery(tableName, spec)
          */
-        return List.of();
+
     }
 
     /**
@@ -114,6 +134,46 @@ public class QueryManager {
      * @param keyValue  the value of the primary key identifying which row to update
      */
     public void updateRow(String tableName, Map<String, Object> rows, Object keyValue) {
+        ColumnData primaryKey = null;
+        for (ColumnData columns: metadata.getColumns(tableName)) {
+            if(columns.isPrimaryKey()) {
+                primaryKey = columns;
+                break;
+            }
+        }
+
+        List<String> upCols = new ArrayList<>();
+        for (String c : rows.keySet()) {
+            if (!c.equals(primaryKey.name)) {
+                upCols.add(c);
+            }
+        }
+
+        String set = "";
+        boolean first = true;
+        for (String col : upCols) {
+            if (!first) {
+                set += ", ";
+            }
+            else {
+                first = false;
+            }
+            set += formatString(col) + "=?";
+        }
+
+        String statementString = "UPDATE " + formatString(tableName) + " SET " + set + " WHERE " + formatString(primaryKey.getName()) + "=?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(statementString)) {
+            int i = 1;
+            for (String col : upCols) {
+                preparedStatement.setObject(i++, rows.get(col));
+            }
+            preparedStatement.setObject(i, keyValue);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
         /*
          - primaryKeyColumn ← first ColumnData from metadata.getColumns(tableName) where isPrimaryKey is true
          - upCols ← keys of rows excluding primaryKeyColumn.name()
