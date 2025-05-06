@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DashboardController">
+
+    <stylesheets>
+        <URL value="@../styles/styles.css" />
+    </stylesheets>
+
+    <top>
+        <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="topbar">
+            <ImageView fx:id="logoImage" fitHeight="70" preserveRatio="true">
+                <image>
+                    <Image preserveRatio="true" url="@../images/logo_white.png" />
+                </image>
+            </ImageView>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="logoutButton" styleClass="topbar-button" text="Logout" />
+        </HBox>
+    </top>
+
+    <left>
+        <VBox alignment="TOP_LEFT" prefWidth="230" spacing="10" styleClass="sidebar">
+            <ToggleButton fx:id="InventoryButton" onAction="#handleSearch" styleClass="nav-button" text="Inventory" />
+            <ToggleButton fx:id="adminBtn" onAction="#handleAdmin" styleClass="nav-button" text="Admin" />
+        </VBox>
+    </left>
+
+    <!-- center become HBox to divide tow modules -->
+    <center>
+        <HBox spacing="0">
+            <VBox fx:id="moduleLeft" prefHeight="600" prefWidth="600" styleClass="module-left" />
+            <VBox fx:id="moduleRight" prefHeight="600" prefWidth="800" styleClass="module-right" />
+
+        </HBox>
+    </center>
+</BorderPane>
