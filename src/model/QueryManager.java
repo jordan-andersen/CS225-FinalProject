@@ -5,10 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service for executing common SQL queries against the database.
  * Uses MetadataService to obtain table and column information.
+ * @author Gabe Luciano
  */
 public class QueryManager {
     /**
@@ -32,6 +34,7 @@ public class QueryManager {
         this.connection = ConnectionManager.getInstance().getConnection();
         this.metadata = new MetadataService();
     }
+
 
     private List<Map<String, Object>> runQuery(String tableName, QuerySpecification querySpecification) {
 
@@ -131,60 +134,33 @@ public class QueryManager {
      *
      * @param tableName the name of the table to update
      * @param rows      a map of column names to new values (must include primary key)
-     * @param keyValue  the value of the primary key identifying which row to update
+     * @param dataValue  the value of the primary key identifying which row to update
      */
-    public void updateRow(String tableName, Map<String, Object> rows, Object keyValue) {
-        ColumnData primaryKey = null;
-        for (ColumnData columns: metadata.getColumns(tableName)) {
-            if(columns.isPrimaryKey()) {
-                primaryKey = columns;
-                break;
-            }
-        }
+    public void updateRow(String tableName, Map<String, Object> rows, Object dataValue) {
+        ColumnData columnData = metadata.getColumns(tableName).stream()
+                .filter(ColumnData::isPrimaryKey)  // Filters based on if the ColumnInfo's primaryKey attribute is true.
+                .findFirst()
+                .orElseThrow();
 
-        List<String> upCols = new ArrayList<>();
-        for (String c : rows.keySet()) {
-            if (!c.equals(primaryKey.name)) {
-                upCols.add(c);
-            }
-        }
+        List<String> upCols = rows.keySet().stream()
+                .filter(c -> !c.equals(columnData.getName()))
+                .toList();
 
-        String set = "";
-        boolean first = true;
-        for (String col : upCols) {
-            if (!first) {
-                set += ", ";
-            }
-            else {
-                first = false;
-            }
-            set += formatString(col) + "=?";
-        }
+        String set = upCols.stream()
+                .map(c -> formatString(c) + "=?")
+                .collect(Collectors.joining(", "));
 
-        String statementString = "UPDATE " + formatString(tableName) + " SET " + set + " WHERE " + formatString(primaryKey.getName()) + "=?";
+        String statementString = "UPDATE " + formatString(tableName) + " SET " + set + " WHERE " + formatString(columnData.getName()) + "=?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(statementString)) {
             int i = 1;
-            for (String col : upCols) {
-                preparedStatement.setObject(i++, rows.get(col));
+            for (String c : upCols) {
+                preparedStatement.setObject(i++, rows.get(c));
             }
-            preparedStatement.setObject(i, keyValue);
+            preparedStatement.setObject(i, dataValue);
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
         }
-
-
-        /*
-         - primaryKeyColumn ← first ColumnData from metadata.getColumns(tableName) where isPrimaryKey is true
-         - upCols ← keys of rows excluding primaryKeyColumn.name()
-         - setClause ← join each col in upCols as formatString(col) + "=?"
-         - sql ← "UPDATE " + formatString(tableName) + " SET " + setClause + " WHERE " + formatString(pkColumn.name()) + "=?"
-         - stmt ← prepareStatement(sql)
-         - for i from 1 to upCols.size()
-            - stmt.setObject(i, rows.get(upCols.get(i-1)))
-         - stmt.setObject(upCols.size() + 1, keyValue)
-         - stmt.executeUpdate()
-         */
     }
 
     /**
