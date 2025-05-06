@@ -8,12 +8,10 @@ import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 
-//Added new imports for implemented code
-
 /**
  * Provides methods for retrieving database metadata such as table names and column definitions.
  *
- * @author -- David Hill
+ * @author David Hill
  *
  */
 
@@ -36,15 +34,6 @@ public class MetadataService {
      * @throws RuntimeException if a database access error occurs
      */
     public List<String> listTables() {
-        /*
-         - Create an empty list called tableList
-         - Call connection.getMetaData().getTables(null, null, "%", ["TABLE"]) to get all table metadata
-         - For each row in the ResultSet:
-            - Read the TABLE_NAME column into tableName
-            - If tableName does NOT start with "MSys":
-                -Add tableName to tableList
-         - Return tableList
-         */
         List<String> tableList = new ArrayList<>();
 
         try (ResultSet rs = connection.getMetaData().getTables(null, null, "%", new String[]{"TABLE"})) {
@@ -74,23 +63,6 @@ public class MetadataService {
      * @throws RuntimeException if a database access error occurs
      */
     public List<ColumnData> getColumns(String tableName) {
-        /*
-         - Create an empty list called columns
-         - Create an empty set called primaryKeys
-
-         - Call connection.getMetaData().getPrimaryKeys(null, null, tableName)
-            - For each row in the ResultSet:
-                - Read the COLUMN_NAME column and add it to primaryKeys
-
-         - Call connection.getMetaData().getColumns(null, null, tableName, "%")
-            - For each row in the ResultSet:
-                - Read COLUMN_NAME into colName
-                - Read TYPE_NAME into colType
-                - Determine isPk = primaryKeys.contains(colName)
-                - Create a new ColumnData(colName, colType, isPk)
-                - Add this ColumnData to columns
-         - Return columns
-         */
         List<ColumnData> columns = new ArrayList<>();
         Set<String> primaryKeys = new HashSet<>();
 

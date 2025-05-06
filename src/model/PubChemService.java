@@ -14,7 +14,7 @@ import java.util.Optional;
 
 /**
  * Service for browsing PubChem compound pages by CAS registry numbers.
- * Code written by Andrew Lightfoot
+ * @author Andrew Lightfoot
  */
 public class PubChemService {
     /// Base URL for PubChem PUG REST API endpoints.
@@ -30,17 +30,8 @@ public class PubChemService {
      * @param cas the CAS registry number to lookup
      */
     public void browseByCas(String cas) {
-        /*
-         - call resolve("compound/xref/RN", cas)
-         - if returned CID is empty
-            - show dialog "No PubChem match for " + cas
-            - return
-         - construct URL "https://pubchem.ncbi.nlm.nih.gov/compound/" + cid
-         - try to open default browser at that URL
-            - on exception, show dialog with error message
-         */
         Optional<String> cidOptional= resolve("compound/xref/RN", cas);
-        if (!cidOptional.isPresent()) {
+        if (cidOptional.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No PubChem match for " + cas);
             return;
         }
@@ -67,24 +58,6 @@ public class PubChemService {
      * @return an Optional containing the first found PubChem CID, or empty if unavailable
      */
     private Optional<String> resolve(String endpoint, String cas) {
-        /*
-         - build request URL = BASE + endpoint + "/" + URL-encode(cas) + "/cids/JSON"
-         - open HTTP connection to URL
-         - if response code ≠ 200
-            - return empty Optional
-         - read entire response body into a single JSON string
-         - find index of "\"CID\"" in JSON
-         - if not found
-            - return empty Optional
-         - locate '[' after that index and matching ']'
-         - if '[' or ']' is missing
-            - return empty Optional
-         - extract substring between '[' and ']'
-         - split on commas, trim each part, discard empty strings
-         - return first trimmed value wrapped in Optional
-         - if any IOException occurs
-            - return empty Optional
-         */
         HttpURLConnection connection = null;
         try {
             String encodedCAS = URLEncoder.encode(cas, StandardCharsets.UTF_8.name());
@@ -121,7 +94,7 @@ public class PubChemService {
                 }
             }
         } catch (IOException e) {
-
+            throw new RuntimeException(e);
         } finally {
             if (connection != null) {
                 connection.disconnect();

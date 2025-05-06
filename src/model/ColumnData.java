@@ -7,7 +7,7 @@ import java.util.Objects;
  * Contains the column name, its SQL data type, and a flag indicating
  * whether it is part of the table's primary key.
  *
- * @author -- Brad Jn-Baptiste
+ * @author Brad Jn-Baptiste
  */
 public class ColumnData {
         /// The name of the column.
