@@ -3,7 +3,9 @@ package tests;
 import model.PubChemService;
 import java.util.Scanner;
 
-// this is a tester for PubChemService
+/* this is a tester for PubChemService
+** Code written by Andrew Lightfoot
+ */
 public class PubChemServiceTester {
     public static void main(String[] args) {
         PubChemService pubChemService = new PubChemService();

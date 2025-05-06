@@ -14,6 +14,7 @@ import java.util.Optional;
 
 /**
  * Service for browsing PubChem compound pages by CAS registry numbers.
+ * Code written by Andrew Lightfoot
  */
 public class PubChemService {
     /// Base URL for PubChem PUG REST API endpoints.
