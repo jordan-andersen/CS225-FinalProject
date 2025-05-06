@@ -35,7 +35,6 @@ public class QueryManager {
         this.metadata = new MetadataService();
     }
 
-
     private List<Map<String, Object>> runQuery(String tableName, QuerySpecification querySpecification) {
 
         List<Map<String, Object>> results = new ArrayList<>();
@@ -72,7 +71,6 @@ public class QueryManager {
         }
         return results;
     }
-
 
     /**
      * Retrieves all rows from the specified table.
@@ -116,16 +114,6 @@ public class QueryManager {
         QuerySpecification spec = new QuerySpecification(where, "%" + queryString + "%", textColumns.size());
 
         return runQuery(tableName, spec);
-        /*
-         - columns ← metadata.getColumns(tableName)
-         - textColumns ← filter columns where type matches CHAR or TEXT or MEMO
-         - if textColumns is empty
-            - return empty list
-         - whereClause ← join each column in textColumns as formatString(column) + " LIKE ?"
-         - spec ← new QuerySpecification(whereClause, "%" + queryString + "%", textColumns.size())
-         - return runQuery(tableName, spec)
-         */
-
     }
 
     /**
