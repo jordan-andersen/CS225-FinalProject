@@ -1,74 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.net.URL?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.InventoryController">
+<BorderPane xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.InventoryController"
+            styleClass="module-container">
 
-    <stylesheets>
-        <URL value="@../../../Desktop/Final/resources/styles/styles.css" />
-    </stylesheets>
-
-    <top>
-        <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="topbar">
-            <ImageView fx:id="logoImage" fitHeight="70" preserveRatio="true">
-                <image>
-                    <Image preserveRatio="true" url="@../../../Desktop/Final/resources/images/logo_white.png" />
-                </image>
-            </ImageView>
-            <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="logoutButton" styleClass="topbar-button" text="Logout" />
-        </HBox>
-    </top>
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15"/>
+    </padding>
 
     <left>
-        <VBox alignment="TOP_LEFT" prefWidth="230" spacing="10" styleClass="sidebar">
-            <ToggleButton fx:id="InventoryButton" onAction="#handleSearch" styleClass="nav-button" text="Inventory" />
-            <ToggleButton fx:id="adminBtn" onAction="#handleAdmin" styleClass="nav-button" text="Admin" />
+        <VBox spacing="10">
+            <Button fx:id="toggleBtn" text="☰ Tables" />
+            <ListView fx:id="tableList" prefWidth="180 " />
         </VBox>
     </left>
 
-    <!-- center become HBox to divide tow modules -->
-    <center>
-        <HBox spacing="0">
-            <VBox fx:id="moduleLeft" styleClass="module-left">
-            <children>
-               <TextField fx:id="searchField" promptText="Enter Keyword">
-                  <VBox.margin>
-                     <Insets top="25.0" />
-                  </VBox.margin>
-               </TextField>
-               <Button fx:id="searchButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="273.0" text="Search" />
-               <Button fx:id="CASbutton" mnemonicParsing="false" prefHeight="25.0" prefWidth="273.0" text="CAS Lookup" />
-            </children></VBox>
-            <VBox fx:id="moduleRight" prefHeight="600" prefWidth="1127.0" styleClass="module-right">
-            <children>
-               <TableView fx:id="inventoryTable" maxWidth="1200.0" prefHeight="1600.0">
-                 <columns>
-                   <TableColumn fx:id="chemicalColumn" prefWidth="121.33331048488617" text="Chemical Name" />
-                   <TableColumn fx:id="concentrationColumn" prefWidth="99.33332061767578" text="Concentration" />
-                     <TableColumn fx:id="companyColumn" minWidth="5.3333740234375" prefWidth="62.66661071777344" text="Company" />
-                     <TableColumn fx:id="shelfColumn" prefWidth="85.33331298828125" text="Shelf" />
-                     <TableColumn fx:id="jarsColumn" minWidth="6.66668701171875" prefWidth="110.0" text="Quantity of Jars" />
-                     <TableColumn fx:id="amountColumn" minWidth="0.0" prefWidth="54.000091552734375" text="Amount" />
-                     <TableColumn fx:id="unitColumn" minWidth="0.0" prefWidth="60.6666259765625" text="Unit" />
-                     <TableColumn fx:id="dropperColumn" prefWidth="143.3333740234375" text="Quantity of Droppers" />
-                     <TableColumn fx:id="CAScolumn" maxWidth="388.000020345052" minWidth="-1.0" prefWidth="388.000020345052" text="CAS #" />
-                 </columns>
-               </TableView>
-            </children></VBox>
-
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Search:" />
+            <TextField fx:id="searchField" promptText="Enter keyword..." />
+            <Button fx:id="goBtn" text="Go" />
+            <Button fx:id="casBtn" text="CAS 🔬" />
+            <Button fx:id="usersBtn" text="Manage Users" />
         </HBox>
+    </top>
+
+    <center>
+        <TableView fx:id="dataTable" VBox.vgrow="ALWAYS" />
     </center>
+
+    <bottom>
+        <Label fx:id="statusBar" styleClass="status-bar" />
+    </bottom>
+
 </BorderPane>

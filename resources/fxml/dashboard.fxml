@@ -34,7 +34,7 @@
             <ToggleButton fx:id="addBtn" text="Add a Container" onAction="#handleAdd" styleClass="nav-button" />
             <ToggleButton fx:id="locationBtn" text="Locations" onAction="#handleLocation" styleClass="nav-button" />
             <ToggleButton fx:id="sdsBtn" text="SDS and Files" onAction="#handleSDS" styleClass="nav-button" />
-            <ToggleButton fx:id="orderBtn" text="Order Requests" onAction="#handleOrder" styleClass="nav-button" />
+            <ToggleButton fx:id="orderBtn" text="Order Requests" onAction="#handleOrder" styleClass="nav-buttion" />
         </VBox>
     </left>
 
