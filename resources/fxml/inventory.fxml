@@ -42,19 +42,19 @@
     <!-- center become HBox to divide tow modules -->
     <center>
         <HBox spacing="0">
-            <VBox fx:id="moduleLeft" prefHeight="600.0" prefWidth="265.0" styleClass="module-left">
+            <VBox fx:id="moduleLeft" styleClass="module-left">
             <children>
                <TextField fx:id="searchField" promptText="Enter Keyword">
                   <VBox.margin>
                      <Insets top="25.0" />
                   </VBox.margin>
                </TextField>
-               <Button fx:id="searchButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="269.0" text="Search" />
+               <Button fx:id="searchButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="273.0" text="Search" />
                <Button fx:id="CASbutton" mnemonicParsing="false" prefHeight="25.0" prefWidth="273.0" text="CAS Lookup" />
             </children></VBox>
             <VBox fx:id="moduleRight" prefHeight="600" prefWidth="1127.0" styleClass="module-right">
             <children>
-               <TableView fx:id="inventoryTable" prefHeight="600.0" prefWidth="891.0">
+               <TableView fx:id="inventoryTable" maxWidth="1200.0" prefHeight="1600.0">
                  <columns>
                    <TableColumn fx:id="chemicalColumn" prefWidth="121.33331048488617" text="Chemical Name" />
                    <TableColumn fx:id="concentrationColumn" prefWidth="99.33332061767578" text="Concentration" />
@@ -64,7 +64,7 @@
                      <TableColumn fx:id="amountColumn" minWidth="0.0" prefWidth="54.000091552734375" text="Amount" />
                      <TableColumn fx:id="unitColumn" minWidth="0.0" prefWidth="60.6666259765625" text="Unit" />
                      <TableColumn fx:id="dropperColumn" prefWidth="143.3333740234375" text="Quantity of Droppers" />
-                     <TableColumn fx:id="CAScolumn" prefWidth="388.000020345052" text="CAS #" />
+                     <TableColumn fx:id="CAScolumn" maxWidth="388.000020345052" minWidth="-1.0" prefWidth="388.000020345052" text="CAS #" />
                  </columns>
                </TableView>
             </children></VBox>

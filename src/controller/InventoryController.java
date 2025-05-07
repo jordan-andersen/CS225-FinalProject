@@ -17,13 +17,7 @@ public class InventoryController {
     @FXML
     public TextField searchField;
     @FXML
-    public Button searchButton;
-    @FXML
-    public Button CASbutton;
-    @FXML
-    public Button adminBtn;
-    @FXML
-    public Button logoutButton;
+    public Button searchButton, CASbutton, adminBtn, logoutButton;
     @FXML
     public TableView inventoryTable;
     @FXML
@@ -44,6 +38,19 @@ public class InventoryController {
     public TableColumn dropperColumn;
     @FXML
     public TableColumn CAScolumn;
+
+    @FXML
+    public void initialize(){
+
+
+
+
+
+    }
+
+
+
+
 
 
 
