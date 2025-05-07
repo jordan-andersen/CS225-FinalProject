@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml">
+    <Label text="SDS and File Storage model Loaded" />
+</StackPane>
