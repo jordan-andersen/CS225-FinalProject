@@ -20,7 +20,7 @@
         <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="topbar">
             <ImageView fx:id="logoImage" fitHeight="70" preserveRatio="true">
                 <image>
-                    <Image preserveRatio="true" url="@../images/logo_white.png" />
+                    <Image preserveRatio="true" url="@../../../Desktop/Final/resources/images/logo_white.png" />
                 </image>
             </ImageView>
             <Region HBox.hgrow="ALWAYS" />
