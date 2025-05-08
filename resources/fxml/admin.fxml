@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.AdminController">
+   <top>
+      <Label text="USER MANAGEMENT" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+   </top>
+   <center>
+      <TableView prefHeight="328.0" prefWidth="296.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="userTable" prefWidth="303.0" text="USERS" />
+            <TableColumn fx:id="roleTable" prefWidth="303.0" text="ROLES" />
+        </columns>
+      </TableView>
+   </center>
+   <bottom>
+      <Pane prefHeight="46.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="addBtn" layoutX="218.0" layoutY="11.0" mnemonicParsing="false" text="ADD USER" />
+            <Button fx:id="removeBtn" layoutX="310.0" layoutY="11.0" mnemonicParsing="false" text="REMOVE USER" />
+         </children>
+      </Pane>
+   </bottom>
+</BorderPane>
