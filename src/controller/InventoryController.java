@@ -44,13 +44,13 @@ public class InventoryController {
         try {
             List<String> tables = metadata.listTables();
             if (tables != null) {
-                tableList.setItems(FXCollections.observableArrayList(tables));
+                categoriesList.setItems(FXCollections.observableArrayList(tables));
             }
         } catch (Exception e) {
             statusBar.setText("Error loading table list: " + e.getMessage());
         }
 
-        tableList.getSelectionModel().selectedItemProperty().addListener((obs, oldTable, newTable) -> {
+        categoriesList.getSelectionModel().selectedItemProperty().addListener((obs, oldTable, newTable) -> {
             if (newTable != null) {
                 searchField.clear();
                 loadTable(newTable);
@@ -58,7 +58,7 @@ public class InventoryController {
         });
 
         searchField.setOnAction(event -> doSearch());
-        goBtn.setOnAction(event -> doSearch());
+        searchButton.setOnAction(event -> doSearch());
         toggleBtn.setOnAction(event -> {
             if (!searchField.getText().trim().isEmpty()) doSearch();
         });
