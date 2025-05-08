@@ -18,7 +18,7 @@ public class UserManager {
     /// Default administrator password created during bootstrap.
     private static final String DEFAULT_PASSWORD = "admin1234";
 
-    // Bootstrap (executes on class load): ensure Users table exists and default admin user is present
+    /// Bootstrap (executes on class load): ensure Users table exists and default admin user is present
     static {
         try {
             Connection connection = ConnectionManager.getInstance().getConnection();
