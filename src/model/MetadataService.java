@@ -12,7 +12,6 @@ import java.util.Set;
  * Provides methods for retrieving database metadata such as table names and column definitions.
  *
  * @author David Hill
- *
  */
 
 public class MetadataService {
