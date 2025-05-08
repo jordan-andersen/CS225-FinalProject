@@ -2,6 +2,7 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import model.User;
 import model.UserManager;
 import javafx.stage.Stage;
@@ -26,6 +27,26 @@ public class LoginController {
     public Optional<User> getAuthenticatedUser() {
         return Optional.ofNullable(authenticatedUser);
     }
+
+    @FXML
+    private void initialize() {
+        // Add keyboard event listeners for the username and password fields
+        usernameField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleLogin();  // Trigger the login method when Enter key is pressed
+            }
+        });
+
+        passwordField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleLogin();  // Trigger the login method when Enter key is pressed
+            }
+        });
+
+        // You can also set the login button as the default button, so pressing Enter triggers the button action
+        loginButton.setDefaultButton(true);
+    }
+
 
     @FXML
     private void handleLogin() {
