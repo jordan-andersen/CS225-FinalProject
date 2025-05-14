@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-
 <?import java.net.URL?>
 <BorderPane xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml"
@@ -29,16 +27,67 @@
 
     <left>
         <VBox spacing="10" prefWidth="230" alignment="TOP_LEFT" styleClass="sidebar">
-            <ToggleButton fx:id="searchBtn" text="Inventory" onAction="#handleSearch" styleClass="nav-button" />
-            <ToggleButton fx:id="adminBtn" text="Admin" onAction="#handleAdmin" styleClass="nav-button" />
-            <ToggleButton fx:id="addBtn" text="Add a Container" onAction="#handleAdd" styleClass="nav-button" />
-            <ToggleButton fx:id="locationBtn" text="Locations" onAction="#handleLocation" styleClass="nav-button" />
-            <ToggleButton fx:id="sdsBtn" text="SDS and Files" onAction="#handleSDS" styleClass="nav-button" />
-            <ToggleButton fx:id="orderBtn" text="Order Requests" onAction="#handleOrder" styleClass="nav-button" />
+            <!-- Inventory -->
+            <ToggleButton fx:id="searchBtn" onAction="#handleSearch" styleClass="nav-button">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <ImageView fitHeight="20" fitWidth="20">
+                        <Image url="@/images/icons/inventory.png" />
+                    </ImageView>
+                    <Label text="Inventory" styleClass="nav-label"/>
+                </HBox>
+            </ToggleButton>
+
+            <!-- Admin -->
+            <ToggleButton fx:id="adminBtn" onAction="#handleAdmin" styleClass="nav-button">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <ImageView fitHeight="20" fitWidth="20">
+                        <Image url="@/images/icons/admin.png" />
+                    </ImageView>
+                    <Label text="Admin" styleClass="nav-label"/>
+                </HBox>
+            </ToggleButton>
+
+            <!-- Add a Container -->
+            <ToggleButton fx:id="addBtn" onAction="#handleAdd" styleClass="nav-button">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <ImageView fitHeight="20" fitWidth="20">
+                        <Image url="@/images/icons/add_container.png" />
+                    </ImageView>
+                    <Label text="Add a Container" styleClass="nav-label"/>
+                </HBox>
+            </ToggleButton>
+
+            <!-- Locations -->
+            <ToggleButton fx:id="locationBtn" onAction="#handleLocation" styleClass="nav-button">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <ImageView fitHeight="20" fitWidth="20">
+                        <Image url="@/images/icons/locations.png" />
+                    </ImageView>
+                    <Label text="Locations" styleClass="nav-label"/>
+                </HBox>
+            </ToggleButton>
+
+            <!-- SDS and Files -->
+            <ToggleButton fx:id="sdsBtn" onAction="#handleSDS" styleClass="nav-button">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <ImageView fitHeight="20" fitWidth="20">
+                        <Image url="@/images/icons/sds.png" />
+                    </ImageView>
+                    <Label text="SDS and Files" styleClass="nav-label"/>
+                </HBox>
+            </ToggleButton>
+
+            <!-- Order Requests -->
+            <ToggleButton fx:id="orderBtn" onAction="#handleOrder" styleClass="nav-button">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <ImageView fitHeight="20" fitWidth="20">
+                        <Image url="@/images/icons/orders.png" />
+                    </ImageView>
+                    <Label text="Order Requests" styleClass="nav-label"/>
+                </HBox>
+            </ToggleButton>
         </VBox>
     </left>
 
-
     <center/>
-
 </BorderPane>
