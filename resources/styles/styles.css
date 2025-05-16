@@ -1,25 +1,27 @@
-/* styles.css */
+/* styles.css  */
 
-/* Top Bar Styles */
+
 .topbar {
     -fx-padding: 10;
-    -fx-background-color: #002c5c; /* Navy Blue - MassBay */
+    -fx-background-color: #002c5c; /* Navy Blue --> MassBay */
 }
+
 
 .topbar-button {
     -fx-background-color: transparent;
-    -fx-border-color: #688848; /* Green - MassBay */
+    -fx-border-color: #688848; /* Green --> MassBay */
     -fx-text-fill: white;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
     -fx-padding: 5 10;
 }
 
-/* Sidebar Styles */
+
 .sidebar {
     -fx-background-color: #002c5c;
     -fx-padding: 10;
 }
+
 
 .sidebar-title {
     -fx-text-fill: white;
@@ -27,7 +29,7 @@
     -fx-padding: 10 0 10 10;
 }
 
-/* Updated Navigation Button Styles with Icon Support */
+
 .nav-button {
     -fx-background-color: transparent;
     -fx-text-fill: white;
@@ -36,34 +38,18 @@
     -fx-padding: 8 16;
     -fx-pref-width: 180;
     -fx-background-radius: 5;
-    -fx-content-display: left;
-    -fx-graphic-text-gap: 10;
-    -fx-min-height: 40px;
 }
 
-.nav-button .image-view {
-    -fx-fit-height: 20px;
-    -fx-fit-width: 20px;
-}
-
-.nav-button .label {
-    -fx-padding: 0 0 0 8px;
-    -fx-text-fill: inherit;
-}
-
-.nav-button:hover {
-    -fx-background-color: rgba(104, 137, 74, 0.3); /* Semi-transparent green */
-}
 
 .nav-button:selected {
-    -fx-background-color: #68894A; /* MassBay green */
+    -fx-background-color: #68894A;
     -fx-text-fill: white;
     -fx-background-insets: 0;
     -fx-padding: 8 16;
     -fx-background-radius: 5;
 }
 
-/* Secondary Button Styles */
+
 .secondary-button {
     -fx-background-color: transparent;
     -fx-border-color: #10425c;
@@ -74,11 +60,20 @@
     -fx-font-size: 13px;
 }
 
-/* Form Styles */
+.status-bar {
+    -fx-background-color: #f0f0f0;
+    -fx-padding: 5;
+    -fx-font-weight: bold;
+}
+
+
+
+
 .welcome-label {
     -fx-font-size: 20px;
     -fx-text-fill: #333;
 }
+
 
 .textfield-default {
     -fx-pref-width: 500;
@@ -86,36 +81,24 @@
     -fx-background-radius: 4;
 }
 
+/* for short */
 .textfield-short {
     -fx-pref-width: 200;
 }
 
+/* for wide */
 .textfield-wide {
     -fx-pref-width: 700;
 }
 
+/* Add Container */
 .add-container-field {
     -fx-pref-width: 450;
     -fx-background-color: white;
 }
 
+/* SDS */
 .sds-input {
     -fx-pref-width: 550;
     -fx-border-color: #ccc;
-}
-
-/* New Icon-Specific Styles */
-.icon-sm {
-    -fx-fit-height: 16px;
-    -fx-fit-width: 16px;
-}
-
-.icon-md {
-    -fx-fit-height: 20px;
-    -fx-fit-width: 20px;
-}
-
-.icon-lg {
-    -fx-fit-height: 24px;
-    -fx-fit-width: 24px;
 }
