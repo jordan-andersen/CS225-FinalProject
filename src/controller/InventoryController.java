@@ -2,42 +2,42 @@ package controller;
 
 /**
  * InventoryController manages the behavior of the Inventory view in the chemical inventory system.
- * Author: Daniel and Anna
+ * Author: Daniel and Anna.
  */
 
-import javafx.fxml.FXML;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
-import model.User;
-import model.QueryManager;
-import model.MetadataService;
-import model.ColumnData;
-import model.PubChemService;
+import model.*;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class InventoryController {
+
     @FXML private ListView<String> categoriesList;
     @FXML private TableView<ObservableList<String>> dataTable;
     @FXML private TextField searchField;
     @FXML private Label statusBar;
     @FXML private ToggleButton toggleBtn;
-    @FXML private Button searchButton, casBttn, adminBttn, tableBttn;
-
-
+    @FXML private Button searchButton;
+    @FXML private Button casBttn;
+    @FXML private Button adminBttn;
+    @FXML private Button tableBttn;
 
     private User currentUser;
     private String currentTableName;
     private final ObservableList<ObservableList<String>> fullData = FXCollections.observableArrayList();
+
     private final MetadataService metadata = new MetadataService();
-    private final QueryManager queries = new QueryManager();
+    private final QueryManager  queries  = new QueryManager();
 
     @FXML
     public void initialize() {
@@ -57,11 +57,17 @@ public class InventoryController {
             }
         });
 
-        searchField.setOnAction(event -> doSearch());
-        searchButton.setOnAction(event -> doSearch());
-        toggleBtn.setOnAction(event -> {
-            if (!searchField.getText().trim().isEmpty()) doSearch();
-        });
+        searchField.setOnAction(evt -> doSearch());
+        searchButton.setOnAction(evt -> doSearch());
+        if (toggleBtn != null) {
+            toggleBtn.setOnAction(evt -> {
+                if (!searchField.getText().trim().isEmpty()) doSearch();
+            });
+        }
+
+        if (casBttn != null) {
+            casBttn.setOnAction(evt -> promptCas());
+        }
 
         applyRolePermissions();
     }
@@ -73,42 +79,36 @@ public class InventoryController {
             fullData.clear();
 
             List<ColumnData> columnDataList = metadata.getColumns(tableName);
-            List<String> columnNames = columnDataList.stream()
-                    .map(ColumnData::getName)
-                    .collect(Collectors.toList());
+            List<String> columnNames = columnDataList.stream().map(ColumnData::getName).collect(Collectors.toList());
 
             List<Map<String, Object>> rowMaps = queries.selectAll(tableName);
-            List<List<String>> rows = rowMaps.stream()
-                    .map(map -> columnNames.stream()
-                            .map(name -> {
-                                Object val = map.get(name);
-                                return val == null ? "" : val.toString();
-                            })
-                            .collect(Collectors.toList()))
-                    .collect(Collectors.toList());
-
-            for (List<String> row : rows) {
-                fullData.add(FXCollections.observableArrayList(row));
+            for (Map<String, Object> map : rowMaps) {
+                ObservableList<String> row = FXCollections.observableArrayList();
+                for (String colName : columnNames) {
+                    Object val = map.get(colName);
+                    row.add(val == null ? "" : val.toString());
+                }
+                fullData.add(row);
             }
 
             for (int i = 0; i < columnNames.size(); i++) {
                 final int colIndex = i;
                 final String colName = columnNames.get(i);
                 TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
-
                 col.setCellValueFactory(cellData -> {
                     ObservableList<String> rowValues = cellData.getValue();
-                    String cellValue = (rowValues != null && colIndex < rowValues.size()) ? rowValues.get(colIndex) : "";
-                    return new SimpleStringProperty(cellValue);
+                    String value = (rowValues != null && colIndex < rowValues.size()) ? rowValues.get(colIndex) : "";
+                    return new SimpleStringProperty(value);
                 });
 
-                if (currentUser != null && "admin".equalsIgnoreCase(currentUser.getRole())) {
+                boolean isAdmin = currentUser != null && "admin".equalsIgnoreCase(currentUser.getRole());
+                if (isAdmin) {
                     col.setEditable(true);
                     col.setCellFactory(TextFieldTableCell.forTableColumn());
-                    col.setOnEditCommit(event -> {
-                        ObservableList<String> rowData = event.getRowValue();
-                        String newValue = event.getNewValue();
-                        String oldValue = event.getOldValue();
+                    col.setOnEditCommit(evt -> {
+                        ObservableList<String> rowData = evt.getRowValue();
+                        String newValue = evt.getNewValue();
+                        String oldValue = evt.getOldValue();
                         if (!newValue.equals(oldValue)) {
                             String idValue = rowData.get(0);
                             queries.updateRow(tableName, Map.of(colName, newValue), idValue);
@@ -117,19 +117,35 @@ public class InventoryController {
                         }
                     });
                 }
-
                 dataTable.getColumns().add(col);
             }
 
             dataTable.setItems(fullData);
             dataTable.setEditable(currentUser != null && "admin".equalsIgnoreCase(currentUser.getRole()));
+
+            /* row double-click opens details dialog */
+            dataTable.setRowFactory(tv -> {
+                TableRow<ObservableList<String>> row = new TableRow<>();
+                row.setOnMouseClicked(evt -> {
+                    if (evt.getClickCount() == 2 && !row.isEmpty()) {
+                        ObservableList<String> vals = row.getItem();
+                        Map<String,Object> map = new LinkedHashMap<>();
+                        for (int i = 0; i < dataTable.getColumns().size(); i++) {
+                            String colName = dataTable.getColumns().get(i).getText();
+                            map.put(colName, vals.get(i));
+                        }
+                        new RowDetailsDialog(dataTable.getScene().getWindow(), currentTableName, map).showAndWait();
+                    }
+                });
+                return row;
+            });
+
             statusBar.setText("Loaded table \"" + tableName + "\" (" + fullData.size() + " rows)");
         } catch (Exception e) {
             statusBar.setText("Error loading table \"" + tableName + "\": " + e.getMessage());
         }
     }
 
-    @FXML
     private void doSearch() {
         if (currentTableName == null || currentTableName.isEmpty()) return;
 
@@ -141,26 +157,25 @@ public class InventoryController {
         }
 
         try {
-            if (toggleBtn.isSelected()) {
-                FilteredList<ObservableList<String>> filteredData = new FilteredList<>(fullData, row ->
+            boolean useClientFilter = toggleBtn != null && toggleBtn.isSelected();
+            if (useClientFilter) {
+                FilteredList<ObservableList<String>> filtered = new FilteredList<>(fullData, row ->
                         row.stream().anyMatch(cell -> cell != null && cell.toLowerCase().contains(queryText.toLowerCase())));
-                dataTable.setItems(filteredData);
-                statusBar.setText("Filtered results: " + filteredData.size() + " rows match \"" + queryText + "\"");
+                dataTable.setItems(filtered);
+                statusBar.setText("Filtered results: " + filtered.size() + " rows match \"" + queryText + "\"");
             } else {
-                List<Map<String, Object>> resultMaps = queries.search(currentTableName, queryText);
-                List<ColumnData> columnDataList = metadata.getColumns(currentTableName);
-                List<String> columnNames = columnDataList.stream().map(ColumnData::getName).toList();
+                List<Map<String, Object>> matches = queries.search(currentTableName, queryText);
+                List<String> colNames = metadata.getColumns(currentTableName).stream().map(ColumnData::getName).toList();
 
                 ObservableList<ObservableList<String>> searchData = FXCollections.observableArrayList();
-                for (Map<String, Object> map : resultMaps) {
+                for (Map<String, Object> map : matches) {
                     ObservableList<String> row = FXCollections.observableArrayList();
-                    for (String col : columnNames) {
+                    for (String col : colNames) {
                         Object val = map.get(col);
                         row.add(val == null ? "" : val.toString());
                     }
                     searchData.add(row);
                 }
-
                 dataTable.setItems(searchData);
                 statusBar.setText("Search results: " + searchData.size() + " rows found for \"" + queryText + "\"");
             }
@@ -169,7 +184,6 @@ public class InventoryController {
         }
     }
 
-    @FXML
     private void promptCas() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Lookup by CAS");
@@ -189,12 +203,11 @@ public class InventoryController {
         });
     }
 
-    @FXML private Button usersBtn;
     private void applyRolePermissions() {
-        boolean isAdmin = (currentUser != null && "admin".equalsIgnoreCase(currentUser.getRole()));
-        if (usersBtn != null) {
-            usersBtn.setVisible(isAdmin);
-            usersBtn.setManaged(isAdmin);
+        boolean isAdmin = currentUser != null && "admin".equalsIgnoreCase(currentUser.getRole());
+        if (adminBttn != null) {
+            adminBttn.setVisible(isAdmin);
+            adminBttn.setManaged(isAdmin);
         }
         if (dataTable != null) {
             dataTable.setEditable(isAdmin);

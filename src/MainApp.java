@@ -9,7 +9,7 @@ import model.User;
 import java.util.Optional;
 
 /*
- * MainApp is the entry point for the MassBay chemical inventory system.
+ * Main.MainApp is the entry point for the MassBay chemical inventory system.
  * It contains the main method where the application is launched, bringing the
  * user to first login to be able to access all features, and then to the Dashboard.
  *
@@ -27,8 +27,8 @@ public class MainApp extends Application {
     }
 
     private void showLoginScreen() throws Exception {
-        // Load the LoginView.fxml from resources
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
+        // Load the login.fxml from resources
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
         Parent root = loader.load();  // Load the FXML file into the root element
 
         LoginController loginController = loader.getController();  // Get the controller instance for login view
@@ -63,6 +63,11 @@ public class MainApp extends Application {
         primaryStage.setTitle("Dashboard – " + user.getName()); // Display the user's name on the title
         primaryStage.setScene(new Scene(root, 1000, 600));  // Set the dashboard screen's scene with a specific size
         primaryStage.show();  // Show the main dashboard screen
+    }
+
+    public void logout() throws Exception {
+        primaryStage.hide();
+        showLoginScreen();
     }
 
     public static void main(String[] args) {

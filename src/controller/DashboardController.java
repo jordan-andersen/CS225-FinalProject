@@ -1,13 +1,15 @@
+//CHRISTINA KC
+
 package controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
-import javafx.application.Platform;
 import model.User;
 
 import java.io.IOException;
@@ -16,7 +18,7 @@ import java.util.Enumeration;
 
 public class DashboardController {
 
-    @FXML private ToggleButton searchBtn, addBtn, locationBtn, sdsBtn, orderBtn, adminBtn;
+    @FXML private ToggleButton searchBtn, addBtn, sdsBtn, adminBtn;
 
     private ToggleGroup sidebarGroup;
     private User loggedInUser;
@@ -32,18 +34,14 @@ public class DashboardController {
 
         System.out.println("searchBtn = " + searchBtn);
         System.out.println("addBtn = " + addBtn);
-        System.out.println("locationBtn = " + locationBtn);
         System.out.println("sdsBtn = " + sdsBtn);
-        System.out.println("orderBtn = " + orderBtn);
         System.out.println("adminBtn = " + adminBtn);
 
         sidebarGroup = new ToggleGroup();
 
         searchBtn.setToggleGroup(sidebarGroup);
         addBtn.setToggleGroup(sidebarGroup);
-        locationBtn.setToggleGroup(sidebarGroup);
         sdsBtn.setToggleGroup(sidebarGroup);
-        orderBtn.setToggleGroup(sidebarGroup);
         adminBtn.setToggleGroup(sidebarGroup);
 
         searchBtn.setSelected(true);  // default selection is inventory
@@ -66,21 +64,9 @@ public class DashboardController {
     }
 
     @FXML
-    private void handleLocation() {
-        locationBtn.setSelected(true);
-        loadCenterModule("location.fxml");
-    }
-
-    @FXML
     private void handleSDS() {
         sdsBtn.setSelected(true);
         loadCenterModule("sds.fxml");
-    }
-
-    @FXML
-    private void handleOrder() {
-        orderBtn.setSelected(true);
-        loadCenterModule("order.fxml");
     }
 
     @FXML
@@ -127,3 +113,4 @@ public class DashboardController {
         }
     }
 }
+

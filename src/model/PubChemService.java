@@ -5,10 +5,7 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
@@ -101,6 +98,25 @@ public class PubChemService {
             }
         }
         return Optional.empty();
+    }
+
+    /**
+     * Opens the PubChem SDS or general info page for a given CAS number in the default browser.
+     * @param casNumber The CAS number of the chemical.
+     */
+    public void openSDSPage(String casNumber) {
+        String url = "https://pubchem.ncbi.nlm.nih.gov/#query=" + casNumber;
+
+        if (Desktop.isDesktopSupported()) {
+            try {
+                Desktop.getDesktop().browse(new URI(url));
+                System.out.println("Opening SDS info page for CAS: " + casNumber);
+            } catch (IOException | URISyntaxException e) {
+                System.err.println("Failed to open browser: " + e.getMessage());
+            }
+        } else {
+            System.err.println("Desktop browsing not supported on this platform.");
+        }
     }
 
 }
