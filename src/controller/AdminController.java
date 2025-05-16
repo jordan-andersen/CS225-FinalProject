@@ -41,25 +41,32 @@ public class AdminController {
 
     private void addUser() {
         // prompt for username
-        TextInputDialog userDlg = new TextInputDialog();
-        userDlg.setTitle("Add User");
-        userDlg.setHeaderText("Enter new username:");
-        Optional<String> uname = userDlg.showAndWait();
-        if (uname.isEmpty() || uname.get().trim().isEmpty()){
+        TextInputDialog userDialog = new TextInputDialog();
+        userDialog.setTitle("Add User");
+        userDialog.setHeaderText("Enter new username:");
+        Optional<String> username = userDialog.showAndWait();
+        if (username.isEmpty() || username.get().trim().isEmpty()){
             return;
         }
 
         // prompt for role
-        ChoiceDialog<String> roleDlg = new ChoiceDialog<>("user", List.of("admin","user","guest"));
-        roleDlg.setTitle("Select Role");
-        roleDlg.setHeaderText("Role for " + uname.get());
-        Optional<String> role = roleDlg.showAndWait();
+        ChoiceDialog<String> roleDialog = new ChoiceDialog<>("user", List.of("admin","user","guest"));
+        roleDialog.setTitle("Select Role");
+        roleDialog.setHeaderText("Role for " + username.get());
+        Optional<String> role = roleDialog.showAndWait();
         if (role.isEmpty()){
             return;
         }
 
+        TextInputDialog passwordDialog = new TextInputDialog();
+        passwordDialog.setTitle("Add User");
+        passwordDialog.setHeaderText("Enter new username:");
+        Optional<String> password = passwordDialog.showAndWait();
+        if (password.isEmpty() || password.get().trim().isEmpty()){
+            return;
+        }
         // create user and refresh
-        userManager.createUser(uname.get().trim(), "password123", role.get());
+        userManager.createUser(username.get().trim(), password.get().trim(), role.get());
         refreshTable();
     }
 
