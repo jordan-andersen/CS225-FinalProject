@@ -9,19 +9,19 @@
             fx:controller="controller.DashboardController">
 
     <stylesheets>
-        <URL value="@../styles/styles.css" />
+        <URL value="@/styles/styles.css"/>
     </stylesheets>
 
     <top>
         <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="topbar">
             <ImageView fx:id="logoImage" fitHeight="70" preserveRatio="true">
                 <image>
-                    <Image url="@/images/MassBayLogo.png" preserveRatio="true" />
+                    <Image url="@/images/MassBayLogo.png"/>
                 </image>
             </ImageView>
-            <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="scanButton" text="Scan to Add a Container" styleClass="topbar-button" />
-            <Button fx:id="logoutButton" text="Logout" styleClass="topbar-button" />
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="scanButton" text="Scan to Add a Container" styleClass="topbar-button"/>
+            <Button fx:id="logoutButton" text="Logout" styleClass="topbar-button"/>
         </HBox>
     </top>
 
@@ -29,62 +29,74 @@
         <VBox spacing="10" prefWidth="230" alignment="TOP_LEFT" styleClass="sidebar">
             <!-- Inventory -->
             <ToggleButton fx:id="searchBtn" onAction="#handleSearch" styleClass="nav-button">
-                <HBox alignment="CENTER_LEFT" spacing="8">
-                    <ImageView fitHeight="20" fitWidth="20">
-                        <Image url="@/images/icons/inventory.png" />
-                    </ImageView>
-                    <Label text="Inventory" styleClass="nav-label"/>
-                </HBox>
+                <graphic>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <ImageView fitHeight="20" fitWidth="20">
+                            <Image url="@/images/icons/inventory.png"/>
+                        </ImageView>
+                        <Label text="Inventory" styleClass="nav-label"/>
+                    </HBox>
+                </graphic>
             </ToggleButton>
 
             <!-- Admin -->
             <ToggleButton fx:id="adminBtn" onAction="#handleAdmin" styleClass="nav-button">
-                <HBox alignment="CENTER_LEFT" spacing="8">
-                    <ImageView fitHeight="20" fitWidth="20">
-                        <Image url="@/images/icons/admin.png" />
-                    </ImageView>
-                    <Label text="Admin" styleClass="nav-label"/>
-                </HBox>
+                <graphic>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <ImageView fitHeight="20" fitWidth="20">
+                            <Image url="@/images/icons/admin.png"/>
+                        </ImageView>
+                        <Label text="Admin" styleClass="nav-label"/>
+                    </HBox>
+                </graphic>
             </ToggleButton>
 
             <!-- Add a Container -->
             <ToggleButton fx:id="addBtn" onAction="#handleAdd" styleClass="nav-button">
-                <HBox alignment="CENTER_LEFT" spacing="8">
-                    <ImageView fitHeight="20" fitWidth="20">
-                        <Image url="@/images/icons/add_container.png" />
-                    </ImageView>
-                    <Label text="Add a Container" styleClass="nav-label"/>
-                </HBox>
+                <graphic>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <ImageView fitHeight="20" fitWidth="20">
+                            <Image url="@/images/icons/add_container.png"/>
+                        </ImageView>
+                        <Label text="Add a Container" styleClass="nav-label"/>
+                    </HBox>
+                </graphic>
             </ToggleButton>
 
             <!-- Locations -->
             <ToggleButton fx:id="locationBtn" onAction="#handleLocation" styleClass="nav-button">
-                <HBox alignment="CENTER_LEFT" spacing="8">
-                    <ImageView fitHeight="20" fitWidth="20">
-                        <Image url="@/images/icons/locations.png" />
-                    </ImageView>
-                    <Label text="Locations" styleClass="nav-label"/>
-                </HBox>
+                <graphic>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <ImageView fitHeight="20" fitWidth="20">
+                            <Image url="@/images/icons/locations.png"/>
+                        </ImageView>
+                        <Label text="Locations" styleClass="nav-label"/>
+                    </HBox>
+                </graphic>
             </ToggleButton>
 
             <!-- SDS and Files -->
             <ToggleButton fx:id="sdsBtn" onAction="#handleSDS" styleClass="nav-button">
-                <HBox alignment="CENTER_LEFT" spacing="8">
-                    <ImageView fitHeight="20" fitWidth="20">
-                        <Image url="@/images/icons/sds.png" />
-                    </ImageView>
-                    <Label text="SDS and Files" styleClass="nav-label"/>
-                </HBox>
+                <graphic>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <ImageView fitHeight="20" fitWidth="20">
+                            <Image url="@/images/icons/sds.png"/>
+                        </ImageView>
+                        <Label text="SDS and Files" styleClass="nav-label"/>
+                    </HBox>
+                </graphic>
             </ToggleButton>
 
             <!-- Order Requests -->
             <ToggleButton fx:id="orderBtn" onAction="#handleOrder" styleClass="nav-button">
-                <HBox alignment="CENTER_LEFT" spacing="8">
-                    <ImageView fitHeight="20" fitWidth="20">
-                        <Image url="@/images/icons/orders.png" />
-                    </ImageView>
-                    <Label text="Order Requests" styleClass="nav-label"/>
-                </HBox>
+                <graphic>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <ImageView fitHeight="20" fitWidth="20">
+                            <Image url="@/images/icons/orders.png"/>
+                        </ImageView>
+                        <Label text="Order Requests" styleClass="nav-label"/>
+                    </HBox>
+                </graphic>
             </ToggleButton>
         </VBox>
     </left>
