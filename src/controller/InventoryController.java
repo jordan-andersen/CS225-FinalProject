@@ -189,6 +189,7 @@ public class InventoryController {
         });
     }
 
+    @FXML private Button usersBtn;
     private void applyRolePermissions() {
         boolean isAdmin = (currentUser != null && "admin".equalsIgnoreCase(currentUser.getRole()));
         if (usersBtn != null) {
