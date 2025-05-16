@@ -23,49 +23,20 @@ public class AdminController {
     private final QueryManager queryManager = new QueryManager();
 
     @FXML
-    @FXML
     public void initialize() {
-        TableView<Map<String,Object>> tv = userTable.getTableView();
-        userTable.setCellValueFactory(new Callback< TableColumn.CellDataFeatures<Map<String,Object>,
-                String>, ObservableValue<String>>() {
-                    @Override
-                    public ObservableValue<String> call( TableColumn.CellDataFeatures<Map<String,Object>,String> cell
-                    ) {
-                        Object v = cell.getValue().get("username");
-                        String s = v == null ? "" : v.toString();
-                        return new ReadOnlyStringWrapper(s);
-                    }
-                }
-        );
+        tv = userTable.getTableView();
 
-        roleTable.setCellValueFactory(new Callback< TableColumn.CellDataFeatures<Map<String,Object>,
-                String>, ObservableValue<String>>() {
-                    @Override
-                    public ObservableValue<String> call(TableColumn.CellDataFeatures<Map<String,Object>,String> cell) {
-                        Object v = cell.getValue().get("role");
-                        String s = v == null ? "" : v.toString();
-                        return new ReadOnlyStringWrapper(s);
-                    }
-                }
-        );
+        userTable.setCellValueFactory(cell -> {Object v = cell.getValue().get("username");
+            return new ReadOnlyStringWrapper(v == null ? "" : v.toString());
+        });
+        roleTable.setCellValueFactory(cell -> {Object v = cell.getValue().get("role");
+            return new ReadOnlyStringWrapper(v == null ? "" : v.toString());
+        });
 
-        addBtn.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent e) {
-                        addUser(tv);
-                    }
-                }
-        );
+        addBtn.setOnAction(e -> addUser());
+        removeBtn.setOnAction(e -> removeUser());
 
-        removeBtn.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent e) {
-                        removeUser(tv);
-                    }
-                }
-        );
-
-        refreshTable(tv);
+        refreshTable();
     }
 
     private void addUser() {
@@ -74,7 +45,6 @@ public class AdminController {
         userDlg.setTitle("Add User");
         userDlg.setHeaderText("Enter new username:");
         Optional<String> uname = userDlg.showAndWait();
-
         if (uname.isEmpty() || uname.get().trim().isEmpty()){
             return;
         }
@@ -84,12 +54,11 @@ public class AdminController {
         roleDlg.setTitle("Select Role");
         roleDlg.setHeaderText("Role for " + uname.get());
         Optional<String> role = roleDlg.showAndWait();
-
-        if (role.isEmpty()) {
+        if (role.isEmpty()){
             return;
         }
 
-        // create and refresh
+        // create user and refresh
         userManager.createUser(uname.get().trim(), "password123", role.get());
         refreshTable();
     }
