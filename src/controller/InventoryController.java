@@ -43,7 +43,9 @@ public class InventoryController {
     public void initialize() {
 
         try {
-            List<String> tables = metadata.listTables();
+            List<String> tables = metadata.listTables().stream()
+                    .filter(s -> !"Users".equalsIgnoreCase(s))
+                    .collect(Collectors.toList());
             if (tables != null) categoriesList.setItems(FXCollections.observableArrayList(tables));
         } catch (Exception e) {
             statusBar.setText("Error loading table list: " + e.getMessage());
@@ -55,15 +57,16 @@ public class InventoryController {
                 categoriesList.setVisible(!visible);
                 categoriesList.setManaged(!visible);
             });
+
+            categoriesList.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
+                if (n != null) {
+                    searchField.clear();
+                    loadTable(n);
+                }
+                updateInteractionControls(n != null);
+            });
         }
 
-        categoriesList.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
-            if (n != null) {
-                searchField.clear();
-                loadTable(n);
-            }
-            updateInteractionControls(n != null);
-        });
 
         searchField.setOnAction(evt -> doSearch());
         searchButton.setOnAction(evt -> doSearch());
@@ -85,7 +88,7 @@ public class InventoryController {
     private void updateInteractionControls(boolean enabled) {
         if (searchField != null)      searchField.setDisable(!enabled);
         if (searchButton != null)     searchButton.setDisable(!enabled);
-        if (addRowBtn != null)        addRowBtn.setDisable(!enabled || !isAdmin());
+        if (addRowBtn != null && isAdmin())        addRowBtn.setDisable(!enabled);
     }
 
     private void loadTable(String tableName) {
@@ -193,7 +196,7 @@ public class InventoryController {
             adminBttn.setManaged(isAdmin());
         }
         if (dataTable != null) dataTable.setEditable(isAdmin());
-        if (addRowBtn != null)  addRowBtn.setDisable(!isAdmin());
+        // if (addRowBtn != null)  addRowBtn.setDisable(!isAdmin());
     }
 
     public void setCurrentUser(User user) {
