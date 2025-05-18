@@ -34,7 +34,6 @@ public class DashboardController {
     public void initialize() {
         sidebarGroup = new ToggleGroup();
         searchBtn.setToggleGroup(sidebarGroup);
-        addBtn.setToggleGroup(sidebarGroup);
         sdsBtn.setToggleGroup(sidebarGroup);
         adminBtn.setToggleGroup(sidebarGroup);
         searchBtn.setSelected(true);
@@ -48,19 +47,13 @@ public class DashboardController {
     }
 
     @FXML
-    private void handleAdd() {
-        addBtn.setSelected(true);
-        loadCenterModule("add.fxml");
-    }
-
-    @FXML
     private void handleSDS() {
         sdsBtn.setSelected(true);
         loadCenterModule("sds.fxml");
     }
 
     @FXML
-    private void handleAdmin() {
+    private void handleUser() {
         adminBtn.setSelected(true);
         loadCenterModule("admin.fxml");
     }
@@ -74,6 +67,9 @@ public class DashboardController {
             Node content = loader.load();
             Object ctrl = loader.getController();
             if (ctrl instanceof InventoryController inv) {
+                inv.setCurrentUser(loggedInUser);
+            }
+            if (ctrl instanceof AdminController inv) {
                 inv.setCurrentUser(loggedInUser);
             }
             Parent root = searchBtn.getScene().getRoot();

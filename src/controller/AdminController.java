@@ -4,6 +4,7 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import model.QueryManager;
+import model.User;
 import model.UserManager;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class AdminController {
 
     private final UserManager userManager = new UserManager();
     private final QueryManager queryManager = new QueryManager();
+    private User currentUser;
 
     @FXML
     public void initialize() {
@@ -92,6 +94,18 @@ public class AdminController {
             String username = (String) row.get("username");
             userManager.deleteUser(username);
             refreshTable();
+        }
+    }
+
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+        applyRolePermissions();
+    }
+
+    private void applyRolePermissions() {
+        if (!currentUser.getRole().equalsIgnoreCase("admin")) {
+            addBtn.setDisable(true);
+            removeBtn.setDisable(true);
         }
     }
 

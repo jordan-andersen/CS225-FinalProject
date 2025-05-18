@@ -27,8 +27,8 @@
             <Label text="Search:"/>
             <TextField fx:id="searchField" promptText="Enter keyword…"/>
             <Button fx:id="searchButton" text="Go"/>
-            <Button fx:id="casBttn" text="CAS 🔬"/>
-            <Button fx:id="addRowBtn" text="Add Row" disable="true"/>
+            <Button fx:id="casBttn" text="CAS Info Lookup"/>
+            <Button fx:id="addRowBtn" text="Add Chemical Entry" disable="true"/>
         </HBox>
     </top>
 
