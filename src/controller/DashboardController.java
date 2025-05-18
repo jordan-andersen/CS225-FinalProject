@@ -1,5 +1,3 @@
-//CHRISTINA KC
-
 package controller;
 
 import javafx.application.Platform;
@@ -16,6 +14,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 
+/**
+ * @author Christina K., Abraham A. Jordan A.
+ */
 public class DashboardController {
 
     @FXML private ToggleButton searchBtn;

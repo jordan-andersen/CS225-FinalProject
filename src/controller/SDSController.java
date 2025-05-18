@@ -16,6 +16,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * @author Lucas L., Abraham A., Jordan A.
+ */
 public class SDSController {
 
     @FXML private TextField searchField;

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 /**
  * Service for executing common SQL queries against the database.
  * Uses MetadataService to obtain table and column information.
- * @author Gabe Luciano
+ * @author Gabe L., Jordan A.
  */
 public class QueryManager {
     /**
