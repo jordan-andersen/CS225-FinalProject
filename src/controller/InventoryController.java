@@ -65,7 +65,6 @@ public class InventoryController {
                 loadTable(n);
             }
             updateInteractionControls(n != null);
-
         });
 
         searchField.setOnAction(evt -> doSearch());
@@ -84,10 +83,11 @@ public class InventoryController {
         applyRolePermissions();
         updateInteractionControls(false); // disable search + add buttons at startup
     }
+
     private void updateInteractionControls(boolean enabled) {
-        if (searchField != null) searchField.setDisable(!enabled);
-        if (searchButton != null) searchButton.setDisable(!enabled);
-        if (addRowBtn != null && isAdmin()) addRowBtn.setDisable(!enabled);
+        if (searchField != null)      searchField.setDisable(!enabled);
+        if (searchButton != null)     searchButton.setDisable(!enabled);
+        if (addRowBtn != null)        addRowBtn.setDisable(!enabled || !isAdmin());
     }
 
     private void loadTable(String tableName) {
@@ -195,7 +195,7 @@ public class InventoryController {
             adminBttn.setManaged(isAdmin());
         }
         if (dataTable != null) dataTable.setEditable(isAdmin());
-        // if (addRowBtn != null)  addRowBtn.setDisable(!isAdmin());
+        if (addRowBtn != null)  addRowBtn.setDisable(!isAdmin());
     }
 
     public void setCurrentUser(User user) {

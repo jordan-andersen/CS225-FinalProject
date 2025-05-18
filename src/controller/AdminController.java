@@ -16,7 +16,7 @@ import java.util.Optional;
  */
 public class AdminController {
 
-    @FXML private TableView<Map<String, Object>> usersTable;          // NEW: parent TableView
+    @FXML private TableView<Map<String, Object>> usersTable;          // parent TableView
     @FXML private TableColumn<Map<String, Object>, String> userTable; // username column
     @FXML private TableColumn<Map<String, Object>, String> roleTable; // role column
 
@@ -64,6 +64,7 @@ public class AdminController {
             return;
         }
 
+        /* Prompt for password */
         TextInputDialog passwdDlg = new TextInputDialog();
         passwdDlg.setTitle("Add User");
         passwdDlg.setHeaderText("Enter password:");
