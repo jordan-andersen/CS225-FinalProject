@@ -185,11 +185,6 @@ public class InventoryController {
             }
         });
     }
-    private void updateInteractionControls(boolean enabled) {
-        if (searchField != null) searchField.setDisable(!enabled);
-        if (searchButton != null) searchButton.setDisable(!enabled);
-        if (addRowBtn != null) addRowBtn.setDisable(!enabled || !isAdmin());
-    }
 
     private void applyRolePermissions() {
         if (adminBttn != null) {

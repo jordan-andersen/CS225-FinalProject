@@ -65,9 +65,9 @@ public class AdminController {
         }
 
         TextInputDialog passwdDlg = new TextInputDialog();
-        userDlg.setTitle("Add User");
-        userDlg.setHeaderText("Enter password:");
-        Optional<String> password = userDlg.showAndWait();
+        passwdDlg.setTitle("Add User");
+        passwdDlg.setHeaderText("Enter password:");
+        Optional<String> password = passwdDlg.showAndWait();
 
         if (password.isEmpty() || password.get().trim().isEmpty()) {
             return;
