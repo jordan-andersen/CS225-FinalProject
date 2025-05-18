@@ -13,10 +13,10 @@ public class SDSController {
 
     @FXML private TextField searchField;
     @FXML private Button searchButton;
-    @FXML private TableView<ObservableList<String>> SDSdataTable;
+    @FXML private TableView <ObservableList<String>> SDSdataTable;
     @FXML private Label statusBar;
 
-    private final QueryManager    queries  = new QueryManager();
+    private final QueryManager queries  = new QueryManager();
     private final MetadataService metadata = new MetadataService();
     private final ObservableList<ObservableList<String>> fullData = FXCollections.observableArrayList();
 
