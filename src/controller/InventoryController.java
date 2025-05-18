@@ -62,7 +62,8 @@ public class InventoryController {
                 searchField.clear();
                 loadTable(n);
             }
-            if (addRowBtn != null) addRowBtn.setDisable(n == null || !isAdmin());
+            updateInteractionControls(n != null);
+
         });
 
         searchField.setOnAction(evt -> doSearch());
@@ -79,6 +80,12 @@ public class InventoryController {
         }
 
         applyRolePermissions();
+        updateInteractionControls(false); // disable search + add buttons at startup
+    }
+    private void updateInteractionControls(boolean enabled) {
+        if (searchField != null) searchField.setDisable(!enabled);
+        if (searchButton != null) searchButton.setDisable(!enabled);
+        if (addRowBtn != null) addRowBtn.setDisable(!enabled || !isAdmin());
     }
 
     private void loadTable(String tableName) {
@@ -177,6 +184,11 @@ public class InventoryController {
                 catch (Exception ex) { statusBar.setText("CAS lookup failed"); }
             }
         });
+    }
+    private void updateInteractionControls(boolean enabled) {
+        if (searchField != null) searchField.setDisable(!enabled);
+        if (searchButton != null) searchButton.setDisable(!enabled);
+        if (addRowBtn != null) addRowBtn.setDisable(!enabled || !isAdmin());
     }
 
     private void applyRolePermissions() {
