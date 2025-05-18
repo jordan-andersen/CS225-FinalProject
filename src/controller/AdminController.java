@@ -55,17 +55,26 @@ public class AdminController {
         /* Prompt for username */
         TextInputDialog userDlg = new TextInputDialog();
         userDlg.setTitle("Add User");
-        userDlg.setHeaderText("Enter new username:");
-        Optional<String> uname = userDlg.showAndWait();
+        userDlg.setHeaderText("Enter username:");
+        Optional<String> username = userDlg.showAndWait();
 
-        if (uname.isEmpty() || uname.get().trim().isEmpty()) {
+        if (username.isEmpty() || username.get().trim().isEmpty()) {
+            return;
+        }
+
+        TextInputDialog passwdDlg = new TextInputDialog();
+        userDlg.setTitle("Add User");
+        userDlg.setHeaderText("Enter password:");
+        Optional<String> password = userDlg.showAndWait();
+
+        if (password.isEmpty() || password.get().trim().isEmpty()) {
             return;
         }
 
         /* Prompt for role */
         ChoiceDialog<String> roleDlg = new ChoiceDialog<>("user", List.of("admin", "user", "guest"));
-        roleDlg.setTitle("Select Role");
-        roleDlg.setHeaderText("Role for " + uname.get());
+        roleDlg.setTitle("Select user role");
+        roleDlg.setHeaderText("Role for " + username.get());
         Optional<String> role = roleDlg.showAndWait();
 
         if (role.isEmpty()) {
@@ -73,7 +82,7 @@ public class AdminController {
         }
 
         /* Create user and refresh table */
-        userManager.createUser(uname.get().trim(), "password123", role.get());
+        userManager.createUser(username.get().trim(), password.get().trim(), role.get());
         refreshTable();
     }
 
