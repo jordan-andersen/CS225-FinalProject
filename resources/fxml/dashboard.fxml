@@ -23,7 +23,6 @@
             </ImageView>
             <Region HBox.hgrow="ALWAYS"/>
             <Button fx:id="scanButton" text="Scan to Add a Chemical" disable="true" styleClass="topbar-button"/>
-            <Button fx:id="logoutButton" text="Logout" disable="true" styleClass="topbar-button"/>
         </HBox>
     </top>
 
