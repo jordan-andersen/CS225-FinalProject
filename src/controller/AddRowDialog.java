@@ -35,9 +35,10 @@ public class AddRowDialog extends Stage {
 
         int r = 0;
         for (ColumnData col : columns) {
-            // skip AUTOINCREMENT primary key
-            if (col.isPrimaryKey() && col.getType().equalsIgnoreCase("COUNTER"))
+            // SKIP ANY PRIMARY-KEY COLUMN (e.g. your uppercase "ID")
+            if (col.isPrimaryKey()) {
                 continue;
+            }
 
             Label lbl = new Label(col.getName() + ":");
             TextField tf = new TextField();
@@ -68,9 +69,7 @@ public class AddRowDialog extends Stage {
         bar.setPrefHeight(40);
         BorderPane.setAlignment(bar, Pos.CENTER_RIGHT);
 
-        javafx.scene.layout.BorderPane root =
-                new javafx.scene.layout.BorderPane(grid, null, null, bar, null);
-
+        BorderPane root = new BorderPane(grid, null, null, bar, null);
         setScene(new Scene(root));
     }
 

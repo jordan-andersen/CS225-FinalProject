@@ -66,12 +66,17 @@ public class DashboardController {
             FXMLLoader loader = new FXMLLoader(resource);
             Node content = loader.load();
             Object ctrl = loader.getController();
+
             if (ctrl instanceof InventoryController inv) {
                 inv.setCurrentUser(loggedInUser);
             }
-            if (ctrl instanceof AdminController inv) {
-                inv.setCurrentUser(loggedInUser);
+            if (ctrl instanceof SDSController sds) {
+                sds.setCurrentUser(loggedInUser);
             }
+            if (ctrl instanceof AdminController adm) {
+                adm.setCurrentUser(loggedInUser);
+            }
+
             Parent root = searchBtn.getScene().getRoot();
             if (root instanceof BorderPane pane) {
                 pane.setCenter(content);
