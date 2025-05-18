@@ -85,7 +85,7 @@ public class InventoryController {
     private void updateInteractionControls(boolean enabled) {
         if (searchField != null) searchField.setDisable(!enabled);
         if (searchButton != null) searchButton.setDisable(!enabled);
-        if (addRowBtn != null) addRowBtn.setDisable(!enabled || !isAdmin());
+        if (addRowBtn != null && isAdmin()) addRowBtn.setDisable(!enabled);
     }
 
     private void loadTable(String tableName) {
@@ -127,6 +127,7 @@ public class InventoryController {
                             statusBar.setText("Updated " + colName);
                         }
                     });
+                    addRowBtn.setDisable(false);
                 }
                 dataTable.getColumns().add(col);
             }
@@ -192,7 +193,7 @@ public class InventoryController {
             adminBttn.setManaged(isAdmin());
         }
         if (dataTable != null) dataTable.setEditable(isAdmin());
-        if (addRowBtn != null)  addRowBtn.setDisable(!isAdmin());
+        // if (addRowBtn != null)  addRowBtn.setDisable(!isAdmin());
     }
 
     public void setCurrentUser(User user) {

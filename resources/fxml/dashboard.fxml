@@ -23,15 +23,14 @@
             </ImageView>
             <Region HBox.hgrow="ALWAYS"/>
             <Button fx:id="scanButton" text="Scan to Add a Chemical" disable="true" styleClass="topbar-button"/>
-            <Button fx:id="logoutButton" text="Logout" disable="true" styleClass="topbar-button"/>
         </HBox>
     </top>
 
     <left>
         <VBox spacing="10" prefWidth="230" alignment="TOP_LEFT" styleClass="sidebar">
             <ToggleButton fx:id="searchBtn" text="Inventory" onAction="#handleSearch" styleClass="nav-button"/>
-            <ToggleButton fx:id="adminBtn" text="Admin" onAction="#handleUser" styleClass="nav-button"/>
-            <ToggleButton fx:id="sdsBtn" text="SDS and Files" onAction="#handleSDS" styleClass="nav-button"/>
+            <ToggleButton fx:id="adminBtn" text="User Management" onAction="#handleUser" styleClass="nav-button"/>
+            <ToggleButton fx:id="sdsBtn" text="SDS Lookup" onAction="#handleSDS" styleClass="nav-button"/>
         </VBox>
     </left>
 
