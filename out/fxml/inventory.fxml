@@ -1,44 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<BorderPane styleClass="module-container" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.InventoryController">
+<BorderPane styleClass="module-container"
+            xmlns="http://javafx.com/javafx/11.0.11"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.InventoryController">
 
     <padding>
-        <Insets bottom="15" left="15" right="15" top="15" />
+        <Insets top="15" right="15" bottom="15" left="15"/>
     </padding>
 
     <left>
-        <VBox spacing="10">
-            <Button fx:id="tableBttn" text="☰ Tables" />
-            <ListView fx:id="categoriesList" prefWidth="180" />
-        </VBox>
+        <ListView fx:id="categoriesList" prefWidth="180"/>
     </left>
 
     <top>
         <HBox alignment="CENTER_LEFT" spacing="10">
-            <Label text="Search:" />
-            <TextField fx:id="searchField" promptText="Enter keyword..." />
-            <Button fx:id="searchButton" text="Go" />
-            <Button fx:id="casBttn" text="CAS 🔬" />
-            <Button fx:id="adminBttn" text="Manage Users" />
+            <padding>
+                <Insets top="5" right="5" bottom="5" left="5"/>
+            </padding>
+
+            <Button fx:id="tableBttn" text="☰"/>
+            <Label text="Search:"/>
+            <TextField fx:id="searchField" promptText="Enter keyword…"/>
+            <Button fx:id="searchButton" text="Go"/>
+            <ToggleButton fx:id="toggleBtn" text="Client Filter"/>
+            <Button fx:id="casBttn" text="CAS 🔬"/>
+            <Button fx:id="adminBttn" text="Manage Users"/>
+            <Button fx:id="addRowBtn" text="Add Row" disable="true"/>
         </HBox>
     </top>
 
     <center>
-        <TableView fx:id="dataTable" VBox.vgrow="ALWAYS" />
+        <TableView fx:id="dataTable" VBox.vgrow="ALWAYS"/>
     </center>
 
     <bottom>
-        <Label fx:id="statusBar" styleClass="status-bar" />
+        <Label fx:id="statusBar" styleClass="status-bar"/>
     </bottom>
 
 </BorderPane>
