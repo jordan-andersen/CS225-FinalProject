@@ -43,7 +43,9 @@ public class InventoryController {
     public void initialize() {
 
         try {
-            List<String> tables = metadata.listTables();
+            List<String> tables = metadata.listTables().stream()
+                    .filter(s -> !"Users".equalsIgnoreCase(s))
+                    .collect(Collectors.toList());
             if (tables != null) categoriesList.setItems(FXCollections.observableArrayList(tables));
         } catch (Exception e) {
             statusBar.setText("Error loading table list: " + e.getMessage());
