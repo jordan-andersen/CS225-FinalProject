@@ -72,7 +72,7 @@ public class PubChemService {
                     stringBuilder.append(line);
                 }
                 String json = stringBuilder.toString();
-                int cidIndex = json.indexOf("\"CID\"");
+                int cidIndex = json.indexOf("CID");
                 if (cidIndex < 0) {
                     return Optional.empty();
                 }

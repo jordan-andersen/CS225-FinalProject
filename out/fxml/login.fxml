@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- FXML file for the LogIn screen, created by Bruna with the use of SceneBuilder -->
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1"
+           fx:controller="controller.LoginController" prefWidth="500" prefHeight="600"
+           style="-fx-background-color: #002C5C;">
+
+    <VBox alignment="CENTER" spacing="20">
+
+        <!-- Logo -->
+        <ImageView fitHeight="150.0" fitWidth="200.0" preserveRatio="true">
+            <image>
+                <Image url="@/images/MassBayLogo.png" />
+            </image>
+        </ImageView>
+
+        <!-- Instruction Text -->
+        <Label text="Please log in using your staff credentials to view or manage lab chemical inventory."
+               wrapText="true"
+               maxWidth="300"
+               style="-fx-font-size: 16px; -fx-text-fill: white; -fx-font-family: 'Segoe UI';" />
+
+        <!-- Login Form Box -->
+        <VBox spacing="10" alignment="CENTER" maxWidth="280"
+              style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 2);">
+            <TextField fx:id="usernameField" promptText="Username" maxWidth="240" />
+            <PasswordField fx:id="passwordField" promptText="Password" maxWidth="240" />
+
+            <!-- Error Label (initially hidden) -->
+            <Label fx:id="errorLabel" text="Incorrect username or password"
+                   visible="false"
+                   style="-fx-text-fill: red; -fx-font-size: 12px;" />
+
+            <Button fx:id="loginButton"
+                    text="Log In"
+                    onAction="#handleLogin"
+                    style="-fx-background-color: #002C5C; -fx-text-fill: white; -fx-font-weight: bold;" />
+
+            <!-- Forgot password text -->
+            <Hyperlink fx:id="forgotPasswordLink"
+                       text="Forgot password?"
+                       onAction="#handleForgotPassword"
+                       style="-fx-font-size: 11px; -fx-text-fill: #444;" />
+        </VBox>
+
+        <!-- Footer -->
+        <HBox alignment="CENTER">
+            <Label text="© 2025 MassBay Community College | For lab personnel use"
+                   wrapText="true"
+                   maxWidth="400"
+                   style="-fx-font-size: 12px; -fx-text-fill: lightgray;" />
+        </HBox>
+    </VBox>
+</StackPane>
+

@@ -10,25 +10,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * AdminController handles the Users administration view.
+ */
 public class AdminController {
 
-    @FXML private TableColumn<Map<String, Object>, String> userTable;
-    @FXML private TableColumn<Map<String, Object>, String> roleTable;
+    @FXML private TableView<Map<String, Object>> usersTable;          // NEW: parent TableView
+    @FXML private TableColumn<Map<String, Object>, String> userTable; // username column
+    @FXML private TableColumn<Map<String, Object>, String> roleTable; // role column
 
     @FXML private Button addBtn;
     @FXML private Button removeBtn;
 
-    private TableView<Map<String, Object>> tv;
+    private TableView<Map<String, Object>> tv;   // reference used in handlers
 
     private final UserManager userManager = new UserManager();
     private final QueryManager queryManager = new QueryManager();
 
     @FXML
     public void initialize() {
-        // Reference to the parent TableView once FXML is loaded
-        tv = userTable.getTableView();
+        /* Reference to the parent TableView once FXML is loaded */
+        tv = (usersTable != null) ? usersTable : userTable.getTableView();
 
-        // Column cell value factories
+        /* Column cell value factories */
         userTable.setCellValueFactory(cell -> {
             Object v = cell.getValue().get("username");
             return new ReadOnlyStringWrapper(v == null ? "" : v.toString());
@@ -39,16 +43,16 @@ public class AdminController {
             return new ReadOnlyStringWrapper(v == null ? "" : v.toString());
         });
 
-        // Button actions
+        /* Button actions */
         addBtn.setOnAction(e -> addUser());
         removeBtn.setOnAction(e -> removeUser());
 
-        // Initial load
+        /* Initial load */
         refreshTable();
     }
 
     private void addUser() {
-        // Prompt for username
+        /* Prompt for username */
         TextInputDialog userDlg = new TextInputDialog();
         userDlg.setTitle("Add User");
         userDlg.setHeaderText("Enter new username:");
@@ -58,7 +62,7 @@ public class AdminController {
             return;
         }
 
-        // Prompt for role
+        /* Prompt for role */
         ChoiceDialog<String> roleDlg = new ChoiceDialog<>("user", List.of("admin", "user", "guest"));
         roleDlg.setTitle("Select Role");
         roleDlg.setHeaderText("Role for " + uname.get());
@@ -68,7 +72,7 @@ public class AdminController {
             return;
         }
 
-        // Create user and refresh table
+        /* Create user and refresh table */
         userManager.createUser(uname.get().trim(), "password123", role.get());
         refreshTable();
     }
