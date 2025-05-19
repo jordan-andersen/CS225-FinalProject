@@ -1,21 +1,15 @@
 package controller;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.TextFieldTableCell;
-import model.ColumnData;
-import model.MetadataService;
-import model.QueryManager;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.awt.Desktop;
+import java.io.IOException;
+import java.nio.file.*;
+import java.util.Comparator;
 import java.util.stream.Collectors;
-
 
 /**
  * @author Lucas L., Abraham A., Jordan A.
@@ -23,98 +17,69 @@ import java.util.stream.Collectors;
 public class SDSController {
 
     @FXML private TextField searchField;
-    @FXML private Button searchButton;
-    @FXML private TableView<ObservableList<String>> SDSdataTable;
+    @FXML private Button    searchButton;
+    @FXML private ListView<Path> sdsList;
     @FXML private Label statusBar;
 
-    private final QueryManager queries      = new QueryManager();
-    private final MetadataService metadata   = new MetadataService();
-    private final ObservableList<ObservableList<String>> fullData = FXCollections.observableArrayList();
-
-    // Name of the table in the database for SDS data
-    private static final String TABLE_NAME = "SDS";
+    private static final Path SDS_DIR = Paths.get("data", "SDS");
+    private final ObservableList<Path> fullList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        // Load the initial SDS table data
-        loadTable(TABLE_NAME);
+        loadDirectory();
 
-        // Wire up search actions
-        searchField.setOnAction(evt -> doSearch());
-        searchButton.setOnAction(evt -> doSearch());
+        searchField.setOnAction(e -> doSearch());
+        searchButton.setOnAction(e -> doSearch());
+
+        sdsList.setCellFactory(lv -> new ListCell<>() {
+            @Override protected void updateItem(Path p, boolean empty) {
+                super.updateItem(p, empty);
+                setText(empty || p == null ? null : p.getFileName().toString());
+            }
+        });
+
+        sdsList.setOnMouseClicked(ev -> {
+            if (ev.getClickCount() == 2 && sdsList.getSelectionModel().getSelectedItem() != null) {
+                try { Desktop.getDesktop().open(sdsList.getSelectionModel().getSelectedItem().toFile()); }
+                catch (Exception ex) {
+                    new Alert(Alert.AlertType.ERROR,"Cannot open file:\n"+ex.getMessage()).showAndWait();
+                }
+            }
+        });
     }
 
-    private void loadTable(String tableName) {
-        try {
-            SDSdataTable.getColumns().clear();
-            fullData.clear();
+    private void loadDirectory() {
+        fullList.clear();
 
-            // Retrieve column metadata
-            List<ColumnData> colsMeta = metadata.getColumns(tableName);
-            List<String> colNames = colsMeta.stream()
-                                           .map(ColumnData::getName)
-                                           .collect(Collectors.toList());
-
-            // Load all rows
-            List<Map<String, Object>> rows = queries.selectAll(tableName);
-            for (Map<String, Object> row : rows) {
-                ObservableList<String> obsRow = FXCollections.observableArrayList();
-                for (String col : colNames) {
-                    obsRow.add(Objects.toString(row.get(col), ""));
-                }
-                fullData.add(obsRow);
-            }
-
-            // Create columns dynamically
-            for (int i = 0; i < colNames.size(); i++) {
-                final int idx = i;
-                String colName = colNames.get(i);
-
-                TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
-                col.setCellValueFactory(cd -> new SimpleStringProperty(cd.getValue().get(idx)));
-
-                // Allow editing if needed
-                col.setCellFactory(TextFieldTableCell.forTableColumn());
-                col.setOnEditCommit(ev -> {
-                    ObservableList<String> editedRow = ev.getRowValue();
-                    String oldVal = ev.getOldValue();
-                    String newVal = ev.getNewValue();
-                    if (!Objects.equals(oldVal, newVal)) {
-                        // Update DB using first column (assumed PK) as identifier
-                        Object pk = editedRow.get(0);
-                        queries.updateRow(tableName,
-                                          Map.of(colName, newVal),
-                                          pk);
-                        editedRow.set(idx, newVal);
-                        statusBar.setText("Updated " + colName);
-                    }
-                });
-
-                SDSdataTable.getColumns().add(col);
-            }
-
-            SDSdataTable.setItems(fullData);
-            SDSdataTable.setEditable(true);
-            statusBar.setText("Loaded \"" + tableName + "\" (" + fullData.size() + " rows)");
-        } catch (Exception e) {
-            statusBar.setText("Error loading table \"" + tableName + "\": " + e.getMessage());
+        if (!Files.isDirectory(SDS_DIR)) {
+            statusBar.setText("Directory not found: " + SDS_DIR.toAbsolutePath());
+            return;
         }
+
+        try (var stream = Files.list(SDS_DIR)) {
+            fullList.addAll(stream.sorted(Comparator.comparing(p -> p.getFileName().toString().toLowerCase()))
+                                  .collect(Collectors.toList()));
+        } catch (IOException ex) {
+            statusBar.setText("Error reading directory: " + ex.getMessage());
+            return;
+        }
+
+        sdsList.setItems(fullList);
+        statusBar.setText(fullList.size() + " files");
     }
 
     private void doSearch() {
         String q = searchField.getText().trim().toLowerCase();
         if (q.isEmpty()) {
-            SDSdataTable.setItems(fullData);
-            statusBar.setText("Showing all rows");
+            sdsList.setItems(fullList);
+            statusBar.setText("Showing all files");
             return;
         }
 
-        FilteredList<ObservableList<String>> filtered =
-            new FilteredList<>(fullData, row ->
-                row.stream().anyMatch(cell -> cell.toLowerCase().contains(q))
-            );
+        FilteredList<Path> filtered =
+                new FilteredList<>(fullList, p -> p.getFileName().toString().toLowerCase().contains(q));
 
-        SDSdataTable.setItems(filtered);
-        statusBar.setText(filtered.size() + " rows match \"" + q + "\"");
+        sdsList.setItems(filtered);
+        statusBar.setText(filtered.size() + " files match \"" + q + "\"");
     }
 }
