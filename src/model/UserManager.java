@@ -9,7 +9,7 @@ import org.mindrot.jbcrypt.BCrypt;
  * Manages user accounts and authentication in the database.
  * On class load, ensures the Users table exists and a default admin account is created.
  * Provides methods for verifying login credentials, creating new users, and deleting users.
- * @author Valerie Holland
+ * @author Valerie H., Jordan A.
  */
 public class UserManager {
     /// Default administrator username created during bootstrap.

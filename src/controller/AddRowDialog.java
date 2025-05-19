@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Abraham A.
+ */
 public class AddRowDialog extends Stage {
 
     private final Map<String, TextField> inputs = new HashMap<>();
@@ -35,10 +38,9 @@ public class AddRowDialog extends Stage {
 
         int r = 0;
         for (ColumnData col : columns) {
-            // SKIP ANY PRIMARY-KEY COLUMN (e.g. your uppercase "ID")
-            if (col.isPrimaryKey()) {
+            // skip AUTOINCREMENT primary key
+            if (col.isPrimaryKey() && col.getType().equalsIgnoreCase("COUNTER"))
                 continue;
-            }
 
             Label lbl = new Label(col.getName() + ":");
             TextField tf = new TextField();
@@ -69,7 +71,9 @@ public class AddRowDialog extends Stage {
         bar.setPrefHeight(40);
         BorderPane.setAlignment(bar, Pos.CENTER_RIGHT);
 
-        BorderPane root = new BorderPane(grid, null, null, bar, null);
+        javafx.scene.layout.BorderPane root =
+                new javafx.scene.layout.BorderPane(grid, null, null, bar, null);
+
         setScene(new Scene(root));
     }
 

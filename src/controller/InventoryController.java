@@ -1,10 +1,5 @@
 package controller;
 
-/**
- * InventoryController manages the behavior of the Inventory view in the chemical inventory system.
- * Author: Daniel and Anna.
- */
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,6 +14,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * InventoryController manages the behavior of the Inventory view in the chemical inventory system.
+ * @author: Daniel W., Anna Z., Lucas L., Abraham A., Jordan A.
+ */
 public class InventoryController {
 
     @FXML private ListView<String> categoriesList;

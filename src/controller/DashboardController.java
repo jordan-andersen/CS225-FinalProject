@@ -1,5 +1,3 @@
-//CHRISTINA KC
-
 package controller;
 
 import javafx.application.Platform;
@@ -16,6 +14,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 
+/**
+ * @author Christina K., Abraham A. Jordan A.
+ */
 public class DashboardController {
 
     @FXML private ToggleButton searchBtn;
@@ -66,17 +67,12 @@ public class DashboardController {
             FXMLLoader loader = new FXMLLoader(resource);
             Node content = loader.load();
             Object ctrl = loader.getController();
-
             if (ctrl instanceof InventoryController inv) {
                 inv.setCurrentUser(loggedInUser);
             }
-            if (ctrl instanceof SDSController sds) {
-                sds.setCurrentUser(loggedInUser);
+            if (ctrl instanceof AdminController inv) {
+                inv.setCurrentUser(loggedInUser);
             }
-            if (ctrl instanceof AdminController adm) {
-                adm.setCurrentUser(loggedInUser);
-            }
-
             Parent root = searchBtn.getScene().getRoot();
             if (root instanceof BorderPane pane) {
                 pane.setCenter(content);

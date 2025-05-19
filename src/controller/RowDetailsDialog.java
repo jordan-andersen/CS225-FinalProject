@@ -15,8 +15,10 @@ import java.util.Map;
 import java.util.Objects;
 
 
-// Simple read-only dialog showing every value of one row.
-
+/**
+ * Simple read-only dialog showing every value of one row.
+ * @author Abraham A.
+ */
 public class RowDetailsDialog extends Stage {
     public RowDetailsDialog(Window owner, String table, Map<String,Object> row) {
         initOwner(owner);

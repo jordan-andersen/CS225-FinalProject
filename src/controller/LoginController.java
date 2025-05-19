@@ -12,13 +12,12 @@ import model.UserManager;
 
 import java.util.Optional;
 
-/*
+/**
  * LoginController is for the login screen of the chemical inventory system.
  * it handles credentials input validation, and screen transitions.
  *
- * first implemented by Bruna
+ * @author Bruna A., Daniel W., Christina A. Jordan A.
  */
-
 public class LoginController {
 
     @FXML private TextField usernameField;

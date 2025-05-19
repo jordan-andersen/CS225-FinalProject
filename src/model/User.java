@@ -4,7 +4,7 @@ import java.util.Objects;
 
 /**
  * Represents an application user with a name and assigned role.
- * @author Valerie Holland
+ * @author Valerie H.
  */
 public class User {
     /// Name of the User

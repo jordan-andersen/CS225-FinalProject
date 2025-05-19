@@ -28,7 +28,6 @@
          <Label text="Search:" />
          <TextField fx:id="searchField" promptText="Enter name or CAS #.." />
          <Button fx:id="searchButton" text="Go" />
-         <Button fx:id="addRowBtn"    text="Add SDS"/>
       </HBox>
    </top>
 

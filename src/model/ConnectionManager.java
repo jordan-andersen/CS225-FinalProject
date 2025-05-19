@@ -7,6 +7,7 @@ import java.sql.SQLException;
 /**
  * Singleton connection manager for an Access database.
  * Manages a single shared JDBC {@link Connection} instance.
+ * @author Baheeja M., Jordan A.
  */
 public class ConnectionManager {
     /// Filesystem path to the Access database file.
