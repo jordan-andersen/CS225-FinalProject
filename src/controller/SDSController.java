@@ -26,6 +26,7 @@ public class SDSController {
     @FXML private Button searchButton;
     @FXML private TableView<ObservableList<String>> SDSdataTable;
     @FXML private Label statusBar;
+    @FXML private Button addRowBtn;
 
     private final QueryManager queries      = new QueryManager();
     private final MetadataService metadata   = new MetadataService();
@@ -42,6 +43,7 @@ public class SDSController {
         // Wire up search actions
         searchField.setOnAction(evt -> doSearch());
         searchButton.setOnAction(evt -> doSearch());
+        addRowBtn.setOnAction(evt -> showAddDialog());
     }
 
     private void loadTable(String tableName) {
@@ -116,5 +118,13 @@ public class SDSController {
 
         SDSdataTable.setItems(filtered);
         statusBar.setText(filtered.size() + " rows match \"" + q + "\"");
+    }
+
+    private void showAddDialog() {
+        List<ColumnData> cols = metadata.getColumns(TABLE_NAME);
+        new AddRowDialog(SDSdataTable.getScene().getWindow(), TABLE_NAME, cols, v -> {
+            queries.insertRow(TABLE_NAME, v);
+            loadTable(TABLE_NAME);
+        }).showAndWait();
     }
 }

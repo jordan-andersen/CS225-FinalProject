@@ -9,10 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane styleClass="module-container"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controller.SDSController">
+<BorderPane styleClass="module-container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SDSController">
 
    <padding>
       <Insets bottom="15" left="15" right="15" top="15" />
@@ -28,6 +25,7 @@
          <Label text="Search:" />
          <TextField fx:id="searchField" promptText="Enter name or CAS #.." />
          <Button fx:id="searchButton" text="Go" />
+         <Button fx:id="addRowBtn" text="Add SDS Entry" />
       </HBox>
    </top>
 
