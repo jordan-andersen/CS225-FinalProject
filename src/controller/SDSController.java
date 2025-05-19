@@ -22,7 +22,9 @@ import java.util.stream.Collectors;
 
 /**
  *
- * @author Lucas L., Abraham A., Jordan A.
+ * @author Lucas L.
+ * @author Abraham A.
+ * @author Jordan A.
  */
 public class SDSController {
 

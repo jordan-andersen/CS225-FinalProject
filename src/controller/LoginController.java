@@ -16,7 +16,10 @@ import java.util.Optional;
  * LoginController is for the login screen of the chemical inventory system.
  * it handles credentials input validation, and screen transitions.
  *
- * @author Bruna A., Daniel W., Christina A. Jordan A.
+ * @author Bruna A.
+ * @author Daniel W.
+ * @author Christina A.
+ * @author Jordan A.
  */
 public class LoginController {
 

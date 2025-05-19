@@ -13,7 +13,9 @@ import java.util.Optional;
 
 /**
  * AdminController handles the Users administration view.
- * @author Lucas L., Jordan A., Abraham A.
+ * @author Lucas L.
+ * @author Jordan A.
+ * @author Abraham A.
  */
 public class AdminController {
 

@@ -15,7 +15,9 @@ import java.net.URL;
 import java.util.Enumeration;
 
 /**
- * @author Christina K., Abraham A. Jordan A.
+ * @author Christina K.
+ * @author Abraham A.
+ * @author Jordan A.
  */
 public class DashboardController {
 

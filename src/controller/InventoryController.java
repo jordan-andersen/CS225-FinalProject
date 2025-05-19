@@ -16,7 +16,11 @@ import java.util.stream.Collectors;
 
 /**
  * InventoryController manages the behavior of the Inventory view in the chemical inventory system.
- * @author: Daniel W., Anna Z., Lucas L., Abraham A., Jordan A.
+ * @author Daniel W.
+ * @author Anna Z.
+ * @author Lucas L.
+ * @author Abraham A.
+ * @author Jordan A.
  */
 public class InventoryController {
 
@@ -44,6 +48,7 @@ public class InventoryController {
         try {
             List<String> tables = metadata.listTables().stream()
                     .filter(s -> !"Users".equalsIgnoreCase(s))
+                    .filter(s -> !"SDS".equalsIgnoreCase(s))
                     .collect(Collectors.toList());
             if (tables != null) categoriesList.setItems(FXCollections.observableArrayList(tables));
         } catch (Exception e) {
