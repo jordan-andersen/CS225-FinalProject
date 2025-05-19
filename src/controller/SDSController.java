@@ -20,6 +20,7 @@ public class SDSController {
     @FXML private Button    searchButton;
     @FXML private ListView<Path> sdsList;
     @FXML private Label statusBar;
+    @FXML private Button addRowBtn;
 
     private static final Path SDS_DIR = Paths.get("data", "SDS");
     private final ObservableList<Path> fullList = FXCollections.observableArrayList();
@@ -81,5 +82,13 @@ public class SDSController {
 
         sdsList.setItems(filtered);
         statusBar.setText(filtered.size() + " files match \"" + q + "\"");
+    }
+
+    private void showAddDialog() {
+        List<ColumnData> cols = metadata.getColumns(TABLE_NAME);
+        new AddRowDialog(SDSdataTable.getScene().getWindow(), TABLE_NAME, cols, v -> {
+            queries.insertRow(TABLE_NAME, v);
+            loadTable(TABLE_NAME);
+        }).showAndWait();
     }
 }
