@@ -15,7 +15,10 @@
 
     <top>
         <HBox spacing="8">
-            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
             <Label text="Search:"/>
             <TextField fx:id="searchField" HBox.hgrow="ALWAYS"/>
             <Button fx:id="searchButton" text="Go"/>
@@ -28,7 +31,9 @@
 
     <bottom>
         <Label fx:id="statusBar">
-            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
         </Label>
     </bottom>
 

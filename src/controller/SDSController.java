@@ -16,11 +16,10 @@ import java.util.stream.Collectors;
  */
 public class SDSController {
 
-    @FXML private TextField searchField;
-    @FXML private Button    searchButton;
+    @FXML private TextField     searchField;
+    @FXML private Button        searchButton;
     @FXML private ListView<Path> sdsList;
-    @FXML private Label statusBar;
-    @FXML private Button addRowBtn;
+    @FXML private Label         statusBar;
 
     private static final Path SDS_DIR = Paths.get("data", "SDS");
     private final ObservableList<Path> fullList = FXCollections.observableArrayList();
@@ -41,10 +40,7 @@ public class SDSController {
 
         sdsList.setOnMouseClicked(ev -> {
             if (ev.getClickCount() == 2 && sdsList.getSelectionModel().getSelectedItem() != null) {
-                try { Desktop.getDesktop().open(sdsList.getSelectionModel().getSelectedItem().toFile()); }
-                catch (Exception ex) {
-                    new Alert(Alert.AlertType.ERROR,"Cannot open file:\n"+ex.getMessage()).showAndWait();
-                }
+                openFileAsync(sdsList.getSelectionModel().getSelectedItem());
             }
         });
     }
@@ -56,10 +52,10 @@ public class SDSController {
             statusBar.setText("Directory not found: " + SDS_DIR.toAbsolutePath());
             return;
         }
-
         try (var stream = Files.list(SDS_DIR)) {
-            fullList.addAll(stream.sorted(Comparator.comparing(p -> p.getFileName().toString().toLowerCase()))
-                                  .collect(Collectors.toList()));
+            fullList.addAll(stream
+                    .sorted(Comparator.comparing(p -> p.getFileName().toString().toLowerCase()))
+                    .collect(Collectors.toList()));
         } catch (IOException ex) {
             statusBar.setText("Error reading directory: " + ex.getMessage());
             return;
@@ -76,19 +72,32 @@ public class SDSController {
             statusBar.setText("Showing all files");
             return;
         }
-
         FilteredList<Path> filtered =
-                new FilteredList<>(fullList, p -> p.getFileName().toString().toLowerCase().contains(q));
+                new FilteredList<>(fullList,
+                        p -> p.getFileName().toString().toLowerCase().contains(q));
 
         sdsList.setItems(filtered);
         statusBar.setText(filtered.size() + " files match \"" + q + "\"");
     }
 
-    private void showAddDialog() {
-        List<ColumnData> cols = metadata.getColumns(TABLE_NAME);
-        new AddRowDialog(SDSdataTable.getScene().getWindow(), TABLE_NAME, cols, v -> {
-            queries.insertRow(TABLE_NAME, v);
-            loadTable(TABLE_NAME);
-        }).showAndWait();
+    private void openFileAsync(Path file) {
+        new Thread(() -> {
+            try {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().open(file.toFile());
+                } else {
+                    showInfo("This platform can’t auto-open files.\n\nPath:\n" +
+                             file.toAbsolutePath());
+                }
+            } catch (Exception ex) {
+                showInfo("Couldn’t open the file:\n" + ex.getMessage() +
+                         "\n\nPath:\n" + file.toAbsolutePath());
+            }
+        }, "file-opener").start();
+    }
+
+    private void showInfo(String msg) {
+        javafx.application.Platform.runLater(() ->
+                new Alert(Alert.AlertType.INFORMATION, msg).showAndWait());
     }
 }
